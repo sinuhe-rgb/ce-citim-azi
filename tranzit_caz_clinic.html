@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caz Clinic | Tulburările de Tranzit</title>
+    <style>
+        :root {
+            --dark-blue: #1a365d;
+            --teal: #319795;
+            --purple: #6b46c1;
+            --orange: #dd6b20;
+            --red: #e53e3e;
+            --green: #38a169;
+            --light-gray: #f7fafc;
+            --medium-gray: #718096;
+            --light-teal: #e6fffa;
+            --light-purple: #faf5ff;
+            --light-orange: #fffaf0;
+            --light-green: #f0fff4;
+            --light-red: #fff5f5;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .brand { font-weight: 700; font-size: 0.875rem; color: var(--teal); margin-bottom: 0.5rem; }
+        .brand-line { height: 3px; background: var(--teal); margin-bottom: 1.5rem; }
+        h1 { font-size: 1.75rem; color: var(--dark-blue); margin-bottom: 0.25rem; }
+        .subtitle { font-size: 1rem; color: var(--medium-gray); margin-bottom: 1.5rem; }
+        .progress-container { background: #e2e8f0; border-radius: 10px; height: 8px; margin-bottom: 2rem; }
+        .progress-bar { background: var(--teal); height: 100%; width: 0%; transition: width 0.5s ease; border-radius: 10px; }
+        .step { display: none; animation: fadeIn 0.5s ease; }
+        .step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .case-box { background: var(--light-gray); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--dark-blue); }
+        .case-title { font-weight: 700; color: var(--dark-blue); margin-bottom: 0.75rem; }
+        .warning-box { border-left-color: var(--orange); }
+        .warning-box .case-title { color: var(--orange); }
+        .alert-box { border-left-color: var(--red); }
+        .alert-box .case-title { color: var(--red); }
+        .question-box { background: white; border: 2px solid var(--teal); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+        .question-title { font-weight: 700; color: var(--teal); margin-bottom: 1rem; }
+        .options-grid { display: grid; gap: 0.75rem; }
+        .option-btn { padding: 1rem; border: 2px solid #e2e8f0; border-radius: 8px; background: white; text-align: left; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
+        .option-btn:hover:not(.disabled) { border-color: var(--teal); background: var(--light-teal); }
+        .option-btn.selected { border-color: var(--dark-blue); background: #ebf8ff; }
+        .option-btn.disabled { cursor: default; opacity: 0.7; }
+        .continue-btn { display: none; margin-top: 1.5rem; padding: 0.875rem 2rem; background: var(--teal); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .continue-btn.show { display: inline-block; }
+        .results-box { background: var(--light-teal); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; border-left: 4px solid var(--teal); }
+        .results-title { font-weight: 700; color: var(--dark-blue); margin-bottom: 0.75rem; }
+        .lab-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        .lab-table th { background: var(--dark-blue); color: white; padding: 0.5rem; text-align: left; }
+        .lab-table td { padding: 0.5rem; border: 1px solid #e2e8f0; }
+        .lab-table tr:nth-child(even) { background: var(--light-gray); }
+        .abnormal { color: var(--red); font-weight: 600; }
+        .analysis-header { background: var(--dark-blue); color: white; padding: 0.75rem 1rem; border-radius: 8px 8px 0 0; font-weight: 700; }
+        .analysis-content { background: var(--light-gray); padding: 1.5rem; border-radius: 0 0 8px 8px; }
+        .diagnosis-box { background: var(--light-green); border-left: 4px solid var(--green); padding: 1rem; margin-bottom: 1rem; border-radius: 0 8px 8px 0; }
+        .diagnosis-title { font-weight: 700; color: var(--green); margin-bottom: 0.5rem; }
+        .your-choices { background: white; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+        .choice-item { padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0; }
+        .choice-item:last-child { border-bottom: none; }
+        .choice-label { font-weight: 600; color: var(--medium-gray); font-size: 0.85rem; }
+        .optimal { color: var(--green); }
+        .suboptimal { color: var(--orange); }
+        .diff-item { padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 6px; background: white; }
+        .diff-item.confirmed { border-left: 4px solid var(--green); }
+        .diff-item.excluded { border-left: 4px solid var(--red); opacity: 0.8; }
+        .learning-box { background: var(--light-purple); border-left: 4px solid var(--purple); padding: 1rem; margin-top: 1.5rem; border-radius: 0 8px 8px 0; }
+        .learning-title { font-weight: 700; color: var(--purple); margin-bottom: 0.75rem; }
+        .score-box { text-align: center; padding: 1.5rem; background: var(--light-teal); border-radius: 8px; margin-top: 1.5rem; }
+        .score-value { font-size: 2rem; font-weight: 700; color: var(--teal); }
+        .restart-btn { display: block; margin: 2rem auto 0; padding: 0.875rem 2rem; background: var(--medium-gray); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.875rem; color: var(--medium-gray); }
+        ul { margin-left: 1.5rem; margin-top: 0.5rem; }
+        li { margin-bottom: 0.35rem; }
+    </style>
+</head>
+<body>
+
+<div class="brand">CE CITIM AZI | Caz Clinic Interactiv</div>
+<div class="brand-line"></div>
+<h1>Cazul Domnului Ionescu</h1>
+<p class="subtitle">Parcurge cazul și ia decizii clinice • Analiza la final</p>
+<div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- STEP 1 -->
+<div class="step active" id="step1">
+    <div class="case-box">
+        <div class="case-title">📋 Prezentarea cazului</div>
+        <p><em>Vineri, ora 10:30. Cabinet de Medicină de Familie.</em></p>
+        <p style="margin-top:1rem"><strong>Gheorghe Ionescu</strong>, 67 ani, pensionar, vine pentru „diaree de 3 săptămâni".</p>
+        <p style="margin-top:1rem"><em>„Am încercat cu Smecta, cu Intetrix, nimic nu merge. Soția zice să vin că poate e ceva mai grav..."</em></p>
+        <ul style="margin-top:1rem">
+            <li>Scaune semi-lichide, 4-5/zi, „urât mirositoare"</li>
+            <li>Nu a observat sânge</li>
+            <li>Dureri abdominale difuze, crampe</li>
+            <li>A slăbit ~3 kg</li>
+            <li>Nu a călătorit, nu a mâncat ceva suspect</li>
+        </ul>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Ce întrebări din anamneză sunt ESENȚIALE?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(1,this,'A')">A. Istoric alimentar detaliat din ultimele 3 săptămâni</button>
+            <button class="option-btn" onclick="select(1,this,'B')">B. Medicația curentă + orice medicament nou în ultima lună</button>
+            <button class="option-btn" onclick="select(1,this,'C')">C. Antecedente familiale digestive + trezirea nocturnă pentru scaun</button>
+            <button class="option-btn" onclick="select(1,this,'D')">D. Istoricul vaccinărilor și contacte cu persoane bolnave</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont1" onclick="goTo(2)">Continuă →</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step" id="step2">
+    <div class="results-box">
+        <div class="results-title">📝 Informații din anamneză</div>
+        <p><strong>Medicație:</strong></p>
+        <ul>
+            <li>Metoprolol 50mg x2/zi (5 ani, HTA)</li>
+            <li>Aspirină 75mg/zi</li>
+            <li><strong>Augmentin</strong> – terminat acum 10 zile (7 zile pt „infecție respiratorie")</li>
+        </ul>
+        <p style="margin-top:1rem"><strong>AHC:</strong> Tată – cancer colon la 72 ani</p>
+        <p><strong>Simptome:</strong> Se trezește noaptea de 1-2 ori pentru scaun diareic. Fără febră.</p>
+    </div>
+    <div class="case-box warning-box">
+        <div class="case-title">⚠️ Semne de alarmă identificate</div>
+        <ul>
+            <li>Vârstă >50 ani + modificare recentă tranzit</li>
+            <li>Scădere ponderală</li>
+            <li>AHC cancer colorectal</li>
+            <li>Diaree nocturnă</li>
+            <li>Antibioterapie recentă</li>
+        </ul>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Ce examen fizic este PRIORITAR?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(2,this,'A')">A. Examen abdominal + auscultație cardio-pulmonară</button>
+            <button class="option-btn" onclick="select(2,this,'B')">B. Examen abdominal + Tușeu rectal</button>
+            <button class="option-btn" onclick="select(2,this,'C')">C. Doar palpare abdominală, tușeul îl programăm ulterior</button>
+            <button class="option-btn" onclick="select(2,this,'D')">D. Examen fizic general complet, inclusiv neurologic</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont2" onclick="goTo(3)">Continuă →</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="step" id="step3">
+    <div class="results-box">
+        <div class="results-title">🩺 Examen fizic</div>
+        <p><strong>General:</strong> Paloare moderată. G=78kg, Î=175cm</p>
+        <p><strong>Semne vitale:</strong> TA=130/80, FC=88/min, T=36.8°C</p>
+        <p><strong>Abdomen:</strong> Sensibilitate difuză, fără apărare. Zgomote accelerate. Fără mase.</p>
+        <p><strong>Tușeu rectal:</strong> Ampulă goală, fără mase, urme scaun maroniu fără sânge vizibil.</p>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Ce investigații paraclinice soliciți ACUM?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(3,this,'A')">A. HLG + Biochimie + PCR + Test toxină C. difficile</button>
+            <button class="option-btn" onclick="select(3,this,'B')">B. Direct colonoscopie – urgentă la semne de alarmă</button>
+            <button class="option-btn" onclick="select(3,this,'C')">C. Coproculturi + Coproparazitologic, apoi așteptăm</button>
+            <button class="option-btn" onclick="select(3,this,'D')">D. Ecografie abdominală + CT abdominal</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont3" onclick="goTo(4)">Continuă →</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="step" id="step4">
+    <div class="results-box">
+        <div class="results-title">🔬 Rezultate investigații</div>
+        <table class="lab-table">
+            <tr><th>Parametru</th><th>Valoare</th><th>Normal</th></tr>
+            <tr><td>Hemoglobină</td><td class="abnormal">10.8 g/dL</td><td>13-17</td></tr>
+            <tr><td>VEM</td><td class="abnormal">76 fL</td><td>80-100</td></tr>
+            <tr><td>Leucocite</td><td class="abnormal">14,200/mm³</td><td>4-10,000</td></tr>
+            <tr><td>PCR</td><td class="abnormal">48 mg/L</td><td>&lt;5</td></tr>
+            <tr><td>K+</td><td class="abnormal">3.2 mEq/L</td><td>3.5-5.0</td></tr>
+            <tr><td>Albumină</td><td class="abnormal">3.1 g/dL</td><td>3.5-5.0</td></tr>
+        </table>
+        <p><strong>Test C. difficile:</strong> <span class="abnormal">POZITIV</span></p>
+        <p><strong>Sânge ocult:</strong> <span class="abnormal">POZITIV</span></p>
+    </div>
+    <div class="case-box alert-box">
+        <div class="case-title">🚨 Situație complexă!</div>
+        <p>Două probleme: infecție C. difficile + semne care necesită excluderea patologiei organice (anemie microcitară, sânge ocult, AHC cancer).</p>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Care este atitudinea terapeutică IMEDIATĂ?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(4,this,'A')">A. Internare + Vancomicină oral + Colonoscopie după rezolvarea infecției</button>
+            <button class="option-btn" onclick="select(4,this,'B')">B. Metronidazol oral ambulatoriu, colonoscopie peste 2 săptămâni</button>
+            <button class="option-btn" onclick="select(4,this,'C')">C. Colonoscopie urgentă acum, apoi decidem tratamentul</button>
+            <button class="option-btn" onclick="select(4,this,'D')">D. Tratament simptomatic cu probiotice, monitorizare</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont4" onclick="goTo(5)">Continuă →</button>
+</div>
+
+<!-- STEP 5 -->
+<div class="step" id="step5">
+    <div class="results-box">
+        <div class="results-title">📅 Evoluție la 2 săptămâni</div>
+        <p>Pacientul internat, a primit <strong>Vancomicină 125mg x4/zi</strong> timp de 10 zile.</p>
+        <p style="margin-top:0.75rem"><strong>Evoluție favorabilă:</strong> Diaree ameliorată (1-2 scaune/zi), PCR=12mg/L, test C.diff negativ.</p>
+        <p style="margin-top:0.75rem"><strong>ÎNSĂ:</strong> Anemia persistă (Hb=10.5), sânge ocult rămâne POZITIV.</p>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Ce faci ACUM?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(5,this,'A')">A. Colonoscopie programată în următoarele zile</button>
+            <button class="option-btn" onclick="select(5,this,'B')">B. Suplimentare fier oral, control peste 3 luni</button>
+            <button class="option-btn" onclick="select(5,this,'C')">C. CT abdomino-pelvin cu contrast</button>
+            <button class="option-btn" onclick="select(5,this,'D')">D. Externare, urmărire în ambulator cu HLG lunar</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont5" onclick="goTo(6)">Vezi rezultatul final →</button>
+</div>
+
+<!-- STEP 6: FINAL -->
+<div class="step" id="step6">
+    <div class="results-box">
+        <div class="results-title">🔍 Rezultatul colonoscopiei</div>
+        <p>Colonoscopia a evidențiat la nivelul colonului drept (cec) o <strong>formațiune tumorală vegetantă de ~4 cm</strong>, parțial ulcerată, cu sângerare de contact.</p>
+        <p style="margin-top:0.75rem"><strong>Biopsie:</strong> Adenocarcinom colorectal moderat diferențiat.</p>
+        <p style="margin-top:0.75rem"><strong>Stadializare CT:</strong> T3N1M0 – boală localizată, rezecabilă.</p>
+    </div>
+
+    <div class="analysis-header">📊 ANALIZA CAZULUI</div>
+    <div class="analysis-content">
+        <div class="diagnosis-box">
+            <div class="diagnosis-title">✓ Diagnostic final</div>
+            <p><strong>1. Adenocarcinom de colon drept</strong> (diagnostic principal)</p>
+            <p><strong>2. Colită cu C. difficile</strong> post-antibioterapie (rezolvată)</p>
+        </div>
+
+        <h3 style="color:var(--dark-blue);margin-bottom:0.75rem">Alegerile tale:</h3>
+        <div class="your-choices" id="choicesSummary"></div>
+
+        <h3 style="color:var(--dark-blue);margin:1.5rem 0 0.75rem">Diagnostic diferențial discutat:</h3>
+        <div class="diff-item confirmed">
+            <strong>Adenocarcinom colorectal</strong> ✓ CONFIRMAT
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Semnele de alarmă (vârstă, AHC, scădere ponderală, anemie microcitară, sânge ocult) indicau clar necesitatea colonoscopiei.</p>
+        </div>
+        <div class="diff-item excluded">
+            <strong>Colită cu C. difficile</strong> – Rezolvată
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Prezentă, dar a mascat temporar patologia subiacentă. Antibioterapia recentă era trigger-ul.</p>
+        </div>
+        <div class="diff-item excluded">
+            <strong>Boală inflamatorie intestinală</strong> – Exclusă
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Colonoscopia nu a arătat aspecte de Crohn/RCUH.</p>
+        </div>
+        <div class="diff-item excluded">
+            <strong>IBS</strong> – Exclus
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Diareea nocturnă și semnele de alarmă exclud cauza funcțională.</p>
+        </div>
+
+        <div class="learning-box">
+            <div class="learning-title">📚 Lecții cheie din acest caz</div>
+            <ul>
+                <li><strong>Diareea nocturnă</strong> exclude aproape sigur IBS – caută cauză organică!</li>
+                <li><strong>C. difficile poate coexista</strong> cu altă patologie. Nu te opri la primul diagnostic!</li>
+                <li><strong>Semnele de alarmă</strong> (>50 ani, scădere ponderală, AHC cancer, anemie) impun colonoscopie, indiferent de alte explicații.</li>
+                <li><strong>Anemia microcitară + sânge ocult pozitiv</strong> = cancer colorectal până la proba contrarie.</li>
+                <li><strong>Secvențierea corectă:</strong> tratează infecția activă, apoi investighează complet.</li>
+            </ul>
+        </div>
+
+        <div class="score-box">
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Scorul tău</p>
+            <div class="score-value" id="finalScore">0/5</div>
+            <p style="font-size:0.9rem;color:var(--medium-gray);margin-top:0.5rem" id="scoreMsg"></p>
+        </div>
+    </div>
+
+    <button class="restart-btn" onclick="location.reload()">Reia cazul</button>
+</div>
+
+<div class="footer">
+    <p>Ce Citim Azi – Caz clinic interactiv pentru rezidenți MF</p>
+    <p>Capitol: Tulburările de Tranzit</p>
+</div>
+
+<script>
+const optimal = {1:'C', 2:'B', 3:'A', 4:'A', 5:'A'};
+const choices = {};
+const labels = {
+    1: 'Anamneză',
+    2: 'Examen fizic', 
+    3: 'Investigații',
+    4: 'Tratament inițial',
+    5: 'Urmărire'
+};
+const explanations = {
+    1: {
+        'A': 'Util dar nu prioritar – contextul epidemic/alimentar e mai puțin probabil la 3 săptămâni.',
+        'B': 'Bun! Medicația e esențială – dar ai ratat întrebarea despre trezirea nocturnă.',
+        'C': 'OPTIM! AHC + diareea nocturnă sunt cruciale pentru diferențierea organic vs funcțional.',
+        'D': 'Irelevant în acest context clinic.'
+    },
+    2: {
+        'A': 'Incomplet – tușeul rectal e obligatoriu la tulburări de tranzit!',
+        'B': 'OPTIM! Tușeul rectal poate detecta mase, sânge, fecalom.',
+        'C': 'Greșit – amânarea tușeului întârzie diagnosticul.',
+        'D': 'Exagerat și neprioritar în acest context.'
+    },
+    3: {
+        'A': 'OPTIM! Panel complet + test C.diff (post-antibioterapie) = abordare corectă.',
+        'B': 'Prematur – colonoscopia în infecție activă crește riscul de perforație.',
+        'C': 'Insuficient – nu acoperă C.diff și întârzie diagnosticul.',
+        'D': 'Nu vizualizează mucoasa și nu detectează C.diff.'
+    },
+    4: {
+        'A': 'OPTIM! Vancomicină (prima linie pt C.diff) + amânarea colonoscopiei până la rezolvare.',
+        'B': 'Metronidazol nu mai e prima linie. Ambulatoriu e riscant la vârstnic.',
+        'C': 'Riscant – colonoscopie în colită activă crește riscul.',
+        'D': 'Complet inadecvat – C.diff netratată poate fi fatală!'
+    },
+    5: {
+        'A': 'OPTIM! Anemia + sânge ocult persistent impun colonoscopie pentru excludere neoplazie.',
+        'B': 'PERICULOS – ignori semnele de alarmă pentru cancer!',
+        'C': 'Util dar nu înlocuiește colonoscopia pentru vizualizare directă.',
+        'D': 'PERICULOS – ratezi diagnosticul de cancer!'
+    }
+};
+
+function select(step, btn, val) {
+    const btns = btn.parentElement.querySelectorAll('.option-btn');
+    btns.forEach(b => { b.classList.remove('selected'); b.classList.add('disabled'); });
+    btn.classList.add('selected');
+    choices[step] = val;
+    document.getElementById('cont'+step).classList.add('show');
+}
+
+function goTo(step) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step'+step).classList.add('active');
+    document.getElementById('progressBar').style.width = ((step-1)/5*100)+'%';
+    if(step === 6) showFinal();
+    window.scrollTo(0,0);
+}
+
+function showFinal() {
+    document.getElementById('progressBar').style.width = '100%';
+    let score = 0;
+    let html = '';
+    for(let i=1; i<=5; i++) {
+        const c = choices[i] || '-';
+        const isOpt = c === optimal[i];
+        if(isOpt) score++;
+        html += `<div class="choice-item">
+            <div class="choice-label">${labels[i]}</div>
+            <div class="choice-value ${isOpt?'optimal':'suboptimal'}">${c}. ${isOpt?'✓ Optim':'Suboptim'}</div>
+            <div style="font-size:0.85rem;color:var(--medium-gray);margin-top:0.25rem">${explanations[i][c]||''}</div>
+        </div>`;
+    }
+    document.getElementById('choicesSummary').innerHTML = html;
+    document.getElementById('finalScore').textContent = score+'/5';
+    const msgs = ['Recitește capitolul!','Poți mai bine!','Bine!','Foarte bine!','Excelent!','Perfectionist!'];
+    document.getElementById('scoreMsg').textContent = msgs[score];
+}
+</script>
+</body>
+</html>

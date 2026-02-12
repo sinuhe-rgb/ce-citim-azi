@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ce Citim Azi | Tulburările de Tranzit</title>
+    <style>
+        :root {
+            --dark-blue: #1a365d;
+            --teal: #319795;
+            --purple: #6b46c1;
+            --orange: #dd6b20;
+            --red: #e53e3e;
+            --light-gray: #f7fafc;
+            --medium-gray: #718096;
+            --light-teal: #e6fffa;
+            --light-purple: #faf5ff;
+            --light-orange: #fffaf0;
+            --light-red: #fff5f5;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .brand {
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+        }
+        .brand-line {
+            height: 3px;
+            background: var(--teal);
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: 2rem;
+            color: var(--dark-blue);
+            margin-bottom: 0.25rem;
+        }
+        .subtitle {
+            font-size: 1.125rem;
+            font-style: italic;
+            color: var(--teal);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Colored boxes */
+        .box {
+            border-radius: 6px;
+            padding: 1rem 1rem 1rem 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid;
+        }
+        .box-teal { background: var(--light-teal); border-color: var(--teal); }
+        .box-purple { background: var(--light-purple); border-color: var(--purple); }
+        .box-orange { background: var(--light-orange); border-color: var(--orange); }
+        .box-red { background: var(--light-red); border-color: var(--red); }
+        .box-blue { background: #ebf8ff; border-color: var(--dark-blue); }
+        
+        .box-title {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .box-teal .box-title { color: var(--dark-blue); }
+        .box-purple .box-title { color: var(--purple); }
+        .box-orange .box-title { color: var(--orange); }
+        .box-red .box-title { color: var(--red); }
+        
+        /* Collapsible sections */
+        .collapsible-section {
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-header {
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: opacity 0.2s;
+            user-select: none;
+        }
+        
+        .section-header:hover {
+            opacity: 0.9;
+        }
+        
+        .section-header.blue { background: var(--dark-blue); }
+        .section-header.purple { background: var(--purple); }
+        .section-header.teal { background: var(--teal); }
+        .section-header.orange { background: var(--orange); }
+        
+        .section-header::after {
+            content: '▼';
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .section-header.collapsed::after {
+            transform: rotate(-90deg);
+        }
+        
+        .section-content {
+            padding: 1rem 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+        }
+        
+        .section-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            padding: 0;
+        }
+        
+        /* Content */
+        h2 {
+            font-size: 1.125rem;
+            color: var(--dark-blue);
+            margin: 1.25rem 0 0.75rem 0;
+        }
+        h2:first-child {
+            margin-top: 0;
+        }
+        p { margin-bottom: 0.75rem; }
+        ul { margin: 0.5rem 0 1rem 1.5rem; }
+        li { margin-bottom: 0.35rem; }
+        
+        /* Tables */
+        .table-caption {
+            font-size: 0.875rem;
+            font-style: italic;
+            color: var(--medium-gray);
+            margin-bottom: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        th {
+            background: var(--dark-blue);
+            color: white;
+            padding: 0.5rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        tr:nth-child(even) { background: var(--light-gray); }
+        tr.highlight-red { background: var(--light-red); }
+        tr.highlight-orange { background: var(--light-orange); }
+        .cell-bold { font-weight: 600; }
+        
+        /* Footer */
+        .footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--medium-gray);
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--medium-gray);
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { padding: 15px; font-size: 15px; }
+            h1 { font-size: 1.5rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="brand">CE CITIM AZI | Seria de Rezumate pentru Rezidenți MF</div>
+<div class="brand-line"></div>
+
+<h1>Tulburările de Tranzit</h1>
+<p class="subtitle">Diareea și Constipația</p>
+
+<div class="box box-teal">
+    <div class="box-title">De ce contează acest capitol?</div>
+    <p>Tulburările de tranzit sunt printre cele mai frecvente motive de prezentare la medicul de familie. Provocarea clinică este dublă: gestionarea deshidratării în diareile acute (risc vital la vârstnici/copii), dar și identificarea „lupilor în blană de oaie" – cancerele colo-rectale sau bolile inflamatorii intestinale care se ascund în spatele unor simptome banale.</p>
+</div>
+
+<!-- IDEILE PRINCIPALE - deschis default -->
+<div class="collapsible-section">
+    <div class="section-header blue" onclick="toggleSection(this)">
+        <span>● IDEILE PRINCIPALE</span>
+    </div>
+    <div class="section-content">
+        <h2>1. Fiziologia Tranzitului Normal</h2>
+        <ul>
+            <li><strong>Greutatea normală a scaunului:</strong> sub 200 g/zi (conținut de apă 60-85%)</li>
+            <li><strong>Frecvența normală:</strong> variază larg, de la 3 scaune/săptămână până la 3 scaune/zi</li>
+            <li><strong>Factori de influență:</strong> fibrele alimentare, genul, medicamentele, exercițiile fizice, stresul</li>
+        </ul>
+
+        <h2>2. Diareea: Definiție și Clasificare</h2>
+        <p>Se definește prin eliminarea a peste 250 g fecale/zi, creșterea frecvenței și scăderea consistenței.</p>
+        <p><strong>A. După durată:</strong> Acută (&lt;2-3 săptămâni, frecvent infecțioasă) vs. Cronică (&gt;4 săptămâni)</p>
+        <p><strong>B. Clasificare fiziopatologică:</strong></p>
+        <ul>
+            <li><strong>Osmotică:</strong> Retenția apei prin substanțe neabsorbabile. Cedează la post (ex. intoleranță la lactoză)</li>
+            <li><strong>Secretorie:</strong> Secreție activă de ioni. Volum mare (&gt;1L/zi), NU cedează la post (ex. holeră, VIPom)</li>
+            <li><strong>Exudativă (Inflamatorie):</strong> Leziuni ale mucoasei cu sânge, mucus, puroi (ex. RCUH, Crohn)</li>
+            <li><strong>Tulburări de motilitate:</strong> Tranzit accelerat (ex. hipertiroidism, colon iritabil)</li>
+        </ul>
+
+        <h2>3. Tabelele esențiale pentru etiologia diareei</h2>
+
+        <p class="table-caption">Tabelul 4.1.5.1. Cauze de diaree acută</p>
+        <table>
+            <tr><th>Categorie</th><th>Cauze specifice</th></tr>
+            <tr>
+                <td class="cell-bold">Infecțioase</td>
+                <td><strong>Bacteriene:</strong> Salmonella, Shigella, Campylobacter, E. Coli, C. difficile<br>
+                    <strong>Virale:</strong> Rotavirus, Norwalk, Adenovirus<br>
+                    <strong>Parazitare:</strong> Giardia, Cryptosporidium, Entamoeba</td>
+            </tr>
+            <tr>
+                <td class="cell-bold">Non-infecțioase</td>
+                <td>Medicamente • Aditivi alimentari • Boală inflamatorie intestinală • Ischemie mezenterică • Fecalom</td>
+            </tr>
+        </table>
+
+        <p class="table-caption">Tabelul 4.1.5.2. Cauze de diaree cronică</p>
+        <table>
+            <tr><th>Mecanism</th><th>Patologii</th></tr>
+            <tr><td class="cell-bold">Osmotică</td><td>Laxative (Mg, fosfați) • Deficit de lactază</td></tr>
+            <tr><td class="cell-bold">Secretorie</td><td>Laxative non-osmotice • Rezecție intestinală • Hormoni: gastrinom, carcinoid, VIP-oame</td></tr>
+            <tr><td class="cell-bold">Inflamatorie</td><td>Crohn, Colită ulcerativă • Colite microscopice • Gastroenterită eozinofilică</td></tr>
+            <tr><td class="cell-bold">Motilitate</td><td>Neuropatia diabetică • Post-vagotomie • Hipertiroidism • Sindrom intestin iritabil</td></tr>
+            <tr><td class="cell-bold">Malabsorbție</td><td>Insuficiență pancreatică • Boală celiacă • Boală Whipple • Suprapopulare bacteriană</td></tr>
+        </table>
+
+        <p class="table-caption">Tabelul 4.1.5.3. Medicamente frecvent asociate cu diareea</p>
+        <table>
+            <tr><th>Clasa</th><th>Exemple</th></tr>
+            <tr><td class="cell-bold">Antibiotice</td><td>Ampicilina, cefalosporine, clindamicina, eritromicina</td></tr>
+            <tr><td class="cell-bold">Cardiovasculare</td><td>Digitala, chinidina, beta-blocante, IECA, statine</td></tr>
+            <tr><td class="cell-bold">Gastrointestinale</td><td>Antiacide cu Mg, H2-blocante, misoprostol, IPP</td></tr>
+            <tr><td class="cell-bold">Neuropsihiatrice</td><td>Litiu, fluoxetina, L-Dopa</td></tr>
+            <tr><td class="cell-bold">Diverse</td><td>Colchicina, AINS, furosemid, teofilina, hormoni tiroidieni</td></tr>
+        </table>
+
+        <h2>4. Constipația</h2>
+        <p>Se definește prin prezența a două sau mai multe simptome, timp de 3 luni: efort de defecație, scaune dure, senzație de evacuare incompletă, manevre manuale necesare, sub 3 scaune/săptămână.</p>
+        <p><strong>Etiologie:</strong> Primară (tranzit lent, dissinergie pelvină) sau Secundară (dietă, medicamente, hipotiroidism, Parkinson, cancer).</p>
+
+        <div class="box box-red">
+            <div class="box-title">⚑ Semne de alarmă la pacientul cu constipație</div>
+            <ul>
+                <li>Rectoragii / Hematochezie (sânge în scaun)</li>
+                <li>Scădere ponderală involuntară</li>
+                <li>Antecedente familiale de cancer de colon sau BII</li>
+                <li>Anemie feriprivă</li>
+                <li>Debutul simptomelor după vârsta de 50 ani</li>
+                <li>Teste screening pozitive pentru sângerări oculte</li>
+            </ul>
+        </div>
+
+        <p class="table-caption">Tabelul 4.1.5.4. Medicamente ce induc constipația</p>
+        <table>
+            <tr><th>Clasa</th><th>Exemple</th></tr>
+            <tr><td class="cell-bold">Analgezice</td><td>Opiacee, AINS</td></tr>
+            <tr><td class="cell-bold">Anticolinergice</td><td>Antihistaminice, antiparkinsoniene, fenotiazine, antidepresive triciclice</td></tr>
+            <tr><td class="cell-bold">Antihipertensive</td><td>Clonidina, blocante de calciu, diuretice</td></tr>
+            <tr><td class="cell-bold">Diverse</td><td>Antiacide (Ca, Al), fier, bariu, rășini (colestiramină)</td></tr>
+        </table>
+
+        <h2>5. Tratamentul Constipației</h2>
+        <p>Abordare în trepte: modificarea stilului de viață (fibre, hidratare) → laxative de volum → laxative osmotice → laxative stimulante (doar pe termen scurt).</p>
+
+        <p class="table-caption">Tabelul 4.1.5.6. Principalele laxative folosite</p>
+        <table>
+            <tr><th>Tip</th><th>Substanță</th><th>Doză uzuală</th></tr>
+            <tr><td class="cell-bold">Osmotice</td><td>Mg hidroxid / Na sulfat / Lactuloza / PEG</td><td>15-30 ml x1-2/zi</td></tr>
+            <tr><td class="cell-bold">De volum</td><td>Psyllium / Metilceluloză</td><td>7-25 g/zi</td></tr>
+            <tr><td class="cell-bold">Emoliente</td><td>Ulei mineral / Docusat de sodiu</td><td>15-30 ml / 500 mg</td></tr>
+            <tr class="highlight-orange"><td class="cell-bold">Stimulante</td><td>Bisacodil / Senna</td><td>1-3 tb/zi (termen scurt!)</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- CLINICAL PEARLS - collapsed default -->
+<div class="collapsible-section">
+    <div class="section-header purple collapsed" onclick="toggleSection(this)">
+        <span>★ CLINICAL PEARLS</span>
+    </div>
+    <div class="section-content collapsed">
+        <div class="box box-purple">
+            <div class="box-title">◉ Diareea nocturnă e un semnal roșu</div>
+            <p>IBS „doarme" noaptea. Dacă pacientul se trezește din somn pentru scaun diareic, cauza este aproape sigur organică (infecție, inflamație, neoplazie).</p>
+        </div>
+
+        <div class="box box-purple">
+            <div class="box-title">◉ Capcana „Diareei" la vârstnici</div>
+            <p>La pacienții imobilizați care acuză diaree, tușeu rectal e obligatoriu. Puteți descoperi un fecalom pe lângă care se scurge lichid („falsa diaree prin preaplin"). Tratamentul = dezimpactare, NU antidiareice!</p>
+        </div>
+
+        <div class="box box-purple">
+            <div class="box-title">◉ Postul diferențiază mecanismele</div>
+            <p>Dacă diareea se oprește când pacientul nu mănâncă = osmotică. Dacă continuă și în post = secretorie.</p>
+        </div>
+
+        <div class="box box-red">
+            <div class="box-title">⚑ Constipația recentă la peste 50 de ani</div>
+            <p>Orice modificare a tranzitului la &gt;50 ani necesită <strong>colonoscopie</strong> pentru excluderea cancerului de colon. Nu tratați doar simptomatic!</p>
+        </div>
+    </div>
+</div>
+
+<!-- DIAGNOSTIC DIFERENȚIAL - collapsed default -->
+<div class="collapsible-section">
+    <div class="section-header teal collapsed" onclick="toggleSection(this)">
+        <span>◆ DIAGNOSTIC DIFERENȚIAL RAPID</span>
+    </div>
+    <div class="section-content collapsed">
+        <table>
+            <tr><th>Simptom / Context</th><th>Ce să suspectezi</th><th>Indiciu</th></tr>
+            <tr>
+                <td>Diaree acută + Febră + Vărsături</td>
+                <td class="cell-bold">Gastroenterită infecțioasă</td>
+                <td>Debut brusc, context epidemic</td>
+            </tr>
+            <tr class="highlight-red">
+                <td>Diaree cronică + Sânge + Mucus</td>
+                <td class="cell-bold">BII (Crohn/RCUH)</td>
+                <td>Dureri abdominale, sindrom inflamator</td>
+            </tr>
+            <tr>
+                <td>Diaree + Scădere + Steatoree</td>
+                <td class="cell-bold">Malabsorbție</td>
+                <td>Scaune voluminoase, grăsoase</td>
+            </tr>
+            <tr>
+                <td>Constipație + Bradicardie + Tegumente reci</td>
+                <td class="cell-bold">Hipotiroidism</td>
+                <td>TSH crescut</td>
+            </tr>
+            <tr>
+                <td>Alternanță Diaree/Constipație + Stres</td>
+                <td class="cell-bold">Sindrom Intestin Iritabil</td>
+                <td>Fără scădere ponderală</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- TAKE-HOME MESSAGES - collapsed default -->
+<div class="collapsible-section">
+    <div class="section-header orange collapsed" onclick="toggleSection(this)">
+        <span>⚡ TAKE-HOME MESSAGES</span>
+    </div>
+    <div class="section-content collapsed">
+        <div class="box box-orange">
+            <div class="box-title">1. Nu trata diareea infecțioasă cu loperamid de la început</div>
+            <p>În diareile invazive (cu febră/sânge), oprirea tranzitului poate agrava starea prin retenția toxinelor/bacteriilor.</p>
+        </div>
+
+        <div class="box box-orange">
+            <div class="box-title">2. Istoricul medicamentos este cheia</div>
+            <p>O multitudine de medicamente pot cauza diaree sau constipație. Revizuirea schemei terapeutice este primul pas.</p>
+        </div>
+
+        <div class="box box-orange">
+            <div class="box-title">3. Hidratarea este prioritară</div>
+            <p>În diareea acută, moartea survine prin dezechilibru hidro-electrolitic, nu prin infecție. Sărurile de rehidratare sunt vitale.</p>
+        </div>
+
+        <div class="box box-orange">
+            <div class="box-title">4. Laxativele pe termen lung</div>
+            <p>Evitați laxativele stimulante (Senna, Bisacodil) cronic – pot da dependență („colon leneș"). Preferați fibrele și laxativele osmotice (Lactuloza, PEG).</p>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Ce Citim Azi – Resurse de învățare pentru rezidenți de Medicină de Familie</p>
+    <p>Bazat pe „Esențialul în Medicina de Familie" • Capitol: Tulburările de Tranzit</p>
+</div>
+
+<script>
+    function toggleSection(header) {
+        header.classList.toggle('collapsed');
+        const content = header.nextElementSibling;
+        content.classList.toggle('collapsed');
+    }
+</script>
+
+</body>
+</html>

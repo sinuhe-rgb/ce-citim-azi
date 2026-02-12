@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grile | Tulburările de Tranzit</title>
+    <style>
+        :root {
+            --dark-blue: #1a365d;
+            --teal: #319795;
+            --purple: #6b46c1;
+            --orange: #dd6b20;
+            --red: #e53e3e;
+            --green: #38a169;
+            --light-gray: #f7fafc;
+            --medium-gray: #718096;
+            --light-teal: #e6fffa;
+            --light-green: #f0fff4;
+            --light-red: #fff5f5;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .brand {
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+        }
+        .brand-line {
+            height: 3px;
+            background: var(--teal);
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: 1.75rem;
+            color: var(--dark-blue);
+            margin-bottom: 0.25rem;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: var(--medium-gray);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Score display */
+        .score-bar {
+            background: var(--light-gray);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .score-text {
+            font-weight: 600;
+            color: var(--dark-blue);
+        }
+        .score-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--teal);
+        }
+        
+        /* Question card */
+        .question-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        .question-header {
+            background: var(--dark-blue);
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+        }
+        
+        .question-body {
+            padding: 1rem;
+        }
+        
+        .question-text {
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--dark-blue);
+        }
+        
+        /* Options */
+        .options-list {
+            list-style: none;
+        }
+        
+        .option {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .option:hover:not(.disabled) {
+            border-color: var(--teal);
+            background: var(--light-teal);
+        }
+        
+        .option.selected {
+            border-color: var(--dark-blue);
+            background: #ebf8ff;
+        }
+        
+        .option.correct {
+            border-color: var(--green);
+            background: var(--light-green);
+        }
+        
+        .option.incorrect {
+            border-color: var(--red);
+            background: var(--light-red);
+        }
+        
+        .option.disabled {
+            cursor: default;
+        }
+        
+        .option-letter {
+            font-weight: 700;
+            color: var(--dark-blue);
+            min-width: 1.5rem;
+        }
+        
+        .option.correct .option-letter {
+            color: var(--green);
+        }
+        
+        .option.incorrect .option-letter {
+            color: var(--red);
+        }
+        
+        /* Explanation */
+        .explanation {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--light-gray);
+            border-radius: 6px;
+            border-left: 4px solid var(--teal);
+            display: none;
+        }
+        
+        .explanation.show {
+            display: block;
+        }
+        
+        .explanation-title {
+            font-weight: 700;
+            color: var(--dark-blue);
+            margin-bottom: 0.5rem;
+        }
+        
+        .explanation-correct {
+            color: var(--green);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .explanation-text {
+            margin-bottom: 0.75rem;
+        }
+        
+        .explanation-wrong {
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+        
+        .explanation-wrong strong {
+            color: #1a202c;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+        }
+        
+        .btn-reset {
+            background: var(--medium-gray);
+            color: white;
+            margin-left: 0.5rem;
+        }
+        
+        .actions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--medium-gray);
+        }
+        
+        @media (max-width: 600px) {
+            body { padding: 15px; font-size: 15px; }
+            h1 { font-size: 1.5rem; }
+            .option { padding: 0.6rem 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="brand">CE CITIM AZI | Grile de Autoevaluare</div>
+<div class="brand-line"></div>
+
+<h1>Tulburările de Tranzit</h1>
+<p class="subtitle">10 întrebări • Selectează răspunsul și verifică explicația</p>
+
+<div class="score-bar">
+    <span class="score-text">Scor curent:</span>
+    <span class="score-number" id="score">0 / 10</span>
+</div>
+
+<!-- Grila 1 -->
+<div class="question-card" data-question="1">
+    <div class="question-header">Întrebarea 1</div>
+    <div class="question-body">
+        <p class="question-text">Un pacient de 35 de ani se prezintă cu diaree de 3 săptămâni. Menționează că diareea se oprește complet când postește. Care este cel mai probabil mecanism fiziopatologic?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Diaree secretorie</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Diaree osmotică</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Diaree exudativă</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Diaree prin tulburări de motilitate</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. Diaree osmotică</p>
+            <p class="explanation-text">Diareea osmotică este cauzată de prezența în lumenul intestinal a unor substanțe neabsorbabile care rețin apa. Caracteristica definitorie este că <strong>cedează la post</strong> – când pacientul nu mai ingeră substanța osmotică (lactoză, sorbitol, laxative osmotice), diareea se oprește.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Secretorie:</strong> NU cedează la post. Este cauzată de secreția activă de ioni în lumen, independent de aportul alimentar (ex. toxina holerică, VIPom).</p>
+                <p><strong>C. Exudativă:</strong> Este asociată cu leziuni ale mucoasei și prezența de sânge, mucus sau puroi. Nu se oprește la post.</p>
+                <p><strong>D. Motilitate:</strong> Tranzitul accelerat nu depinde direct de alimentație și poate persista și în post.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 2 -->
+<div class="question-card" data-question="2">
+    <div class="question-header">Întrebarea 2</div>
+    <div class="question-body">
+        <p class="question-text">O pacientă de 72 de ani, imobilizată la pat după fractura de col femural, este adusă de familie pentru „diaree lichidă". Tușeul rectal evidențiază o masă dură în ampula rectală. Care este diagnosticul și atitudinea corectă?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Gastroenterită acută – tratament cu loperamid</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Colită pseudomembranoasă – tratament cu vancomicină oral</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Falsă diaree prin preaplin – dezimpactare manuală</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Sindrom de intestin iritabil – tratament simptomatic</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Falsă diaree prin preaplin – dezimpactare manuală</p>
+            <p class="explanation-text">La pacienții vârstnici imobilizați, „diareea" poate fi de fapt <strong>scurgere de lichid pe lângă un fecalom</strong>. Tușeul rectal a confirmat prezența masei fecale dure. Tratamentul corect este dezimpactarea, NU antidiareicele, care ar agrava situația!</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Gastroenterită + loperamid:</strong> Loperamid în prezența fecalomului ar agrava obstrucția. Tușeul rectal a exclus această etiologie.</p>
+                <p><strong>B. Colită pseudomembranoasă:</strong> Ar necesita context de antibioterapie recentă și nu ar explica masa dură rectală.</p>
+                <p><strong>D. IBS:</strong> Nu debutează la 72 de ani și nu explică fecalomul palpabil.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 3 -->
+<div class="question-card" data-question="3">
+    <div class="question-header">Întrebarea 3</div>
+    <div class="question-body">
+        <p class="question-text">Care dintre următoarele medicamente este cel MAI PUȚIN probabil să cauzeze diaree?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Metformină</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Colchicină</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Verapamil</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Eritromicină</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Verapamil</p>
+            <p class="explanation-text">Verapamil este un blocant de calciu care cauzează frecvent <strong>constipație</strong>, nu diaree. Efectul se datorează relaxării musculaturii netede intestinale și încetinirii tranzitului.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Metformină:</strong> Diaree frecventă ca efect advers (până la 50% din pacienți), prin mecanism osmotic și modificarea florei intestinale.</p>
+                <p><strong>B. Colchicină:</strong> Diaree și vărsături sunt efecte adverse comune, limitând doza tolerată.</p>
+                <p><strong>D. Eritromicină:</strong> Are efect prokinetic (agonist pe receptorii motilinei), cauzând frecvent diaree și crampe abdominale.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 4 -->
+<div class="question-card" data-question="4">
+    <div class="question-header">Întrebarea 4</div>
+    <div class="question-body">
+        <p class="question-text">Un bărbat de 28 de ani se prezintă cu diaree cronică (6 săptămâni), dureri abdominale și scădere ponderală de 5 kg. Menționează că se trezește noaptea pentru scaun. Ce investigație este prioritară?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Test pentru intoleranță la lactoză</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Coproculturi repetate</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Colonoscopie cu biopsii</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Ecografie abdominală</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Colonoscopie cu biopsii</p>
+            <p class="explanation-text">Triada <strong>diaree cronică + scădere ponderală + diaree nocturnă</strong> sunt semne de alarmă pentru boală organică (BII, neoplazie). Diareea nocturnă exclude practic IBS („IBS doarme noaptea"). Colonoscopia cu biopsii este necesară pentru diagnostic.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Test lactoză:</strong> Intoleranța la lactoză nu explică scăderea ponderală și diareea nocturnă.</p>
+                <p><strong>B. Coproculturi:</strong> Diareea cronică (>4 săptămâni) cu scădere ponderală sugerează cauză non-infecțioasă.</p>
+                <p><strong>D. Ecografie:</strong> Utilă pentru patologie hepato-biliară/pancreatică, dar nu vizualizează mucoasa colonică.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 5 -->
+<div class="question-card" data-question="5">
+    <div class="question-header">Întrebarea 5</div>
+    <div class="question-body">
+        <p class="question-text">Care este frecvența normală a scaunului la adulți?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Exact 1 scaun pe zi</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>De la 3 scaune/săptămână până la 3 scaune/zi</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Minim 1 scaun pe zi, altfel este constipație</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Maximum 2 scaune pe zi, altfel este diaree</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. De la 3 scaune/săptămână până la 3 scaune/zi</p>
+            <p class="explanation-text">Intervalul normal este foarte larg și variază în funcție de dietă, hidratare, activitate fizică și alți factori individuali. <strong>De la 3/săptămână până la 3/zi</strong> este considerat normal.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Exact 1/zi:</strong> Mit comun. Multe persoane sănătoase au scaun la 2-3 zile.</p>
+                <p><strong>C. Minim 1/zi:</strong> Fals – 3 scaune/săptămână este încă în limite normale.</p>
+                <p><strong>D. Maximum 2/zi:</strong> Fals – 3 scaune/zi este încă normal dacă consistența e normală.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 6 -->
+<div class="question-card" data-question="6">
+    <div class="question-header">Întrebarea 6</div>
+    <div class="question-body">
+        <p class="question-text">Un pacient de 55 de ani, fără antecedente semnificative, se prezintă cu constipație de debut recent (2 luni). Ce investigație este OBLIGATORIE?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Radiografie abdominală simplă</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Dozare TSH</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Colonoscopie</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Test terapeutic cu laxative osmotice</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Colonoscopie</p>
+            <p class="explanation-text"><strong>Orice modificare a tranzitului la peste 50 de ani</strong> necesită colonoscopie pentru excluderea cancerului colorectal. Este un semn de alarmă major care nu trebuie ignorat sau tratat doar simptomatic.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Radiografie:</strong> Poate arăta fecalom sau nivele hidro-aerice, dar nu exclude neoplazie.</p>
+                <p><strong>B. TSH:</strong> Hipotiroidismul poate cauza constipație, dar la >50 ani cancerul trebuie exclus întâi.</p>
+                <p><strong>D. Test terapeutic:</strong> GREȘIT – nu tratăm simptomatic fără a exclude cancerul!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 7 -->
+<div class="question-card" data-question="7">
+    <div class="question-header">Întrebarea 7</div>
+    <div class="question-body">
+        <p class="question-text">Care dintre următoarele laxative poate fi utilizat în siguranță pe termen lung pentru constipația cronică?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Bisacodil</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Senna</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Polietilenglicol (PEG)</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Ulei de ricin</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Polietilenglicol (PEG)</p>
+            <p class="explanation-text">PEG (Macrogol) este un laxativ osmotic care <strong>nu se absoarbe</strong> și nu cauzează dependență sau „colon leneș". Este sigur pentru utilizare pe termen lung, inclusiv la vârstnici și gravide.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Bisacodil:</strong> Laxativ stimulant – utilizare doar pe termen scurt (risc de dependență, „colon leneș").</p>
+                <p><strong>B. Senna:</strong> Tot laxativ stimulant – aceleași riscuri ca bisacodilul.</p>
+                <p><strong>D. Ulei de ricin:</strong> Laxativ stimulant puternic, iritant, nu pentru uz cronic.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 8 -->
+<div class="question-card" data-question="8">
+    <div class="question-header">Întrebarea 8</div>
+    <div class="question-body">
+        <p class="question-text">Un copil de 4 ani este adus pentru diaree acută de 2 zile, cu vărsături și febră 38.5°C. Care este prioritatea terapeutică IMEDIATĂ?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Antibioterapie empirică</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Loperamid pentru oprirea diareei</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Rehidratare orală cu soluții de rehidratare</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Coproculturi înainte de orice tratament</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Rehidratare orală cu soluții de rehidratare</p>
+            <p class="explanation-text">În diareea acută, <strong>moartea survine prin deshidratare</strong>, nu prin infecție. Rehidratarea orală (ORS) este prioritatea absolută, mai ales la copii și vârstnici care se deshidratează rapid.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Antibiotice:</strong> Majoritatea gastroenteritelor acute sunt virale și autolimitate. Nu se dau empiric.</p>
+                <p><strong>B. Loperamid:</strong> CONTRAINDICAT la copii sub 6 ani! Poate cauza ileus paralitic și retenție de toxine.</p>
+                <p><strong>D. Coproculturi:</strong> Utile dar nu urgente. Nu întârziem rehidratarea pentru diagnostic.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 9 -->
+<div class="question-card" data-question="9">
+    <div class="question-header">Întrebarea 9</div>
+    <div class="question-body">
+        <p class="question-text">Un pacient cu diaree cronică prezintă scaune voluminoase, grăsoase, cu miros fetid, care plutesc în apă. Care este cel mai probabil mecanism?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Diaree secretorie</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Diaree osmotică</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Malabsorbție (steatoree)</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Diaree inflamatorie</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Malabsorbție (steatoree)</p>
+            <p class="explanation-text"><strong>Steatoreea</strong> (scaune grăsoase) se caracterizează prin: scaune voluminoase, pale, grăsoase, cu miros fetid, care plutesc (conțin grăsimi neabsorbite). Cauzele includ insuficiența pancreatică, boala celiacă, suprapopularea bacteriană.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Secretorie:</strong> Scaune apoase, voluminoase, dar NU grăsoase.</p>
+                <p><strong>B. Osmotică:</strong> Scaune apoase, cedează la post, fără steatoree.</p>
+                <p><strong>D. Inflamatorie:</strong> Se asociază cu sânge, mucus, puroi – nu cu steatoree.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 10 -->
+<div class="question-card" data-question="10">
+    <div class="question-header">Întrebarea 10</div>
+    <div class="question-body">
+        <p class="question-text">O pacientă de 45 de ani acuză alternarea diaree/constipație de 2 ani, cu balonare și disconfort abdominal ameliorat de defecație. Fără scădere ponderală, fără sânge în scaun, analize normale. Care este diagnosticul cel mai probabil?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Boală Crohn</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Cancer de colon</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Sindrom de intestin iritabil (IBS)</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Colită microscopică</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Sindrom de intestin iritabil (IBS)</p>
+            <p class="explanation-text">Criteriile Rome IV pentru IBS: durere/disconfort abdominal recurent, asociat cu defecația, modificarea frecvenței sau formei scaunului, <strong>fără semne de alarmă</strong>. Pacienții cu IBS au analize normale și NU prezintă scădere ponderală sau sânge în scaun.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte răspunsuri sunt greșite:</strong></p>
+                <p><strong>A. Crohn:</strong> S-ar asocia cu scădere ponderală, markeri inflamatori crescuți, posibil sânge/mucus.</p>
+                <p><strong>B. Cancer colon:</strong> La 45 de ani cu simptome de 2 ani, fără scădere ponderală sau anemie, este puțin probabil.</p>
+                <p><strong>D. Colită microscopică:</strong> Se manifestă cu diaree apoasă cronică, nu cu alternanță diaree/constipație.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="actions">
+    <button class="btn btn-primary" onclick="showAllExplanations()">Arată toate explicațiile</button>
+    <button class="btn btn-reset" onclick="resetQuiz()">Resetează</button>
+</div>
+
+<div class="footer">
+    <p>Ce Citim Azi – Grile de autoevaluare pentru rezidenți de Medicină de Familie</p>
+    <p>Capitol: Tulburările de Tranzit</p>
+</div>
+
+<script>
+    let score = 0;
+    let answered = new Set();
+    
+    function selectOption(element) {
+        const card = element.closest('.question-card');
+        const questionNum = card.dataset.question;
+        
+        if (answered.has(questionNum)) return;
+        
+        answered.add(questionNum);
+        
+        const options = card.querySelectorAll('.option');
+        options.forEach(opt => opt.classList.add('disabled'));
+        
+        const isCorrect = element.dataset.correct === 'true';
+        
+        if (isCorrect) {
+            element.classList.add('correct');
+            score++;
+        } else {
+            element.classList.add('incorrect');
+            // Highlight correct answer
+            options.forEach(opt => {
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                }
+            });
+        }
+        
+        // Show explanation
+        const explanation = card.querySelector('.explanation');
+        explanation.classList.add('show');
+        
+        // Update score
+        document.getElementById('score').textContent = score + ' / 10';
+    }
+    
+    function showAllExplanations() {
+        document.querySelectorAll('.explanation').forEach(exp => {
+            exp.classList.add('show');
+        });
+        
+        document.querySelectorAll('.question-card').forEach(card => {
+            const questionNum = card.dataset.question;
+            if (!answered.has(questionNum)) {
+                const options = card.querySelectorAll('.option');
+                options.forEach(opt => {
+                    opt.classList.add('disabled');
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.add('correct');
+                    }
+                });
+                answered.add(questionNum);
+            }
+        });
+    }
+    
+    function resetQuiz() {
+        score = 0;
+        answered = new Set();
+        document.getElementById('score').textContent = '0 / 10';
+        
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.classList.remove('selected', 'correct', 'incorrect', 'disabled');
+        });
+        
+        document.querySelectorAll('.explanation').forEach(exp => {
+            exp.classList.remove('show');
+        });
+    }
+</script>
+
+</body>
+</html>
