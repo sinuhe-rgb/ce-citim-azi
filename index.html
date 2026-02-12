@@ -32,7 +32,6 @@
             padding: 40px 20px;
         }
         
-        /* Header */
         .header {
             text-align: center;
             margin-bottom: 3rem;
@@ -59,7 +58,6 @@
             font-style: italic;
         }
         
-        /* Specialitate selector */
         .speciality-section {
             margin-bottom: 2rem;
         }
@@ -119,7 +117,6 @@
             margin-top: 0.25rem;
         }
         
-        /* Chapters */
         .chapters-section {
             margin-top: 2rem;
         }
@@ -185,7 +182,6 @@
             display: block;
         }
         
-        /* Tab buttons */
         .tab-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -226,7 +222,6 @@
             margin-top: 0.25rem;
         }
         
-        /* Coming soon chapters */
         .chapter-card.coming-soon {
             opacity: 0.6;
         }
@@ -244,7 +239,6 @@
             margin-left: 0.5rem;
         }
         
-        /* Footer */
         .footer {
             margin-top: 3rem;
             text-align: center;
@@ -274,7 +268,7 @@
             <div class="speciality-card active" onclick="selectSpeciality(this, 'mf')">
                 <div class="speciality-icon">🏠</div>
                 <div class="speciality-name">Medicină de Familie</div>
-                <div class="speciality-status">1 capitol disponibil</div>
+                <div class="speciality-status">2 capitole disponibile</div>
             </div>
             <div class="speciality-card disabled">
                 <div class="speciality-icon">👶</div>
@@ -297,8 +291,8 @@
     <section class="chapters-section" id="chaptersSection">
         <div class="section-title">Capitole disponibile</div>
         
-        <!-- Capitol activ -->
-        <div class="chapter-card open" onclick="toggleChapter(this)">
+        <!-- Capitol 1: Tulburări de Tranzit -->
+        <div class="chapter-card" onclick="toggleChapter(this)">
             <div class="chapter-header">
                 <div class="chapter-title">
                     <span class="chapter-number">1</span>
@@ -328,17 +322,38 @@
             </div>
         </div>
         
-        <!-- Capitole viitoare -->
-        <div class="chapter-card coming-soon">
+        <!-- Capitol 2: Cefaleea -->
+        <div class="chapter-card open" onclick="toggleChapter(this)">
             <div class="chapter-header">
                 <div class="chapter-title">
-                    <span class="chapter-number" style="background: var(--medium-gray);">2</span>
+                    <span class="chapter-number">2</span>
                     Cefaleea
-                    <span class="coming-badge">În lucru</span>
+                </div>
+                <span class="chapter-arrow">▼</span>
+            </div>
+            <div class="chapter-content">
+                <p style="color: var(--medium-gray); margin-bottom: 1rem;">Clasificare IHS, migrenă, cluster, red flags SNOOP4Y, urgențe</p>
+                <div class="tab-grid">
+                    <a href="cefaleea_v4_ce_citim_azi.html" class="tab-btn">
+                        <div class="tab-icon">📖</div>
+                        <div class="tab-name">Rezumat</div>
+                        <div class="tab-desc">Teorie structurată</div>
+                    </a>
+                    <a href="cefalee_grile.html" class="tab-btn">
+                        <div class="tab-icon">✍️</div>
+                        <div class="tab-name">Grile</div>
+                        <div class="tab-desc">10 întrebări</div>
+                    </a>
+                    <a href="cefalee_caz_clinic.html" class="tab-btn">
+                        <div class="tab-icon">🏥</div>
+                        <div class="tab-name">Caz Clinic</div>
+                        <div class="tab-desc">Interactiv</div>
+                    </a>
                 </div>
             </div>
         </div>
         
+        <!-- Capitole viitoare -->
         <div class="chapter-card coming-soon">
             <div class="chapter-header">
                 <div class="chapter-title">
@@ -354,6 +369,16 @@
                 <div class="chapter-title">
                     <span class="chapter-number" style="background: var(--medium-gray);">4</span>
                     Hipertensiunea Arterială
+                    <span class="coming-badge">În curând</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chapter-card coming-soon">
+            <div class="chapter-header">
+                <div class="chapter-title">
+                    <span class="chapter-number" style="background: var(--medium-gray);">5</span>
+                    Diabetul Zaharat
                     <span class="coming-badge">În curând</span>
                 </div>
             </div>

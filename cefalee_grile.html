@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grile | Cefaleea</title>
+    <style>
+        :root {
+            --dark-blue: #1a365d;
+            --teal: #319795;
+            --purple: #6b46c1;
+            --orange: #dd6b20;
+            --red: #e53e3e;
+            --green: #38a169;
+            --light-gray: #f7fafc;
+            --medium-gray: #718096;
+            --light-teal: #e6fffa;
+            --light-green: #f0fff4;
+            --light-red: #fff5f5;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .brand { font-weight: 700; font-size: 0.875rem; color: var(--teal); margin-bottom: 0.5rem; }
+        .brand-line { height: 3px; background: var(--teal); margin-bottom: 1.5rem; }
+        h1 { font-size: 1.75rem; color: var(--dark-blue); margin-bottom: 0.25rem; }
+        .subtitle { font-size: 1rem; color: var(--medium-gray); margin-bottom: 1.5rem; }
+        .score-bar { background: var(--light-gray); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+        .score-text { font-weight: 600; color: var(--dark-blue); }
+        .score-number { font-size: 1.5rem; font-weight: 700; color: var(--teal); }
+        .question-card { border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+        .question-header { background: var(--dark-blue); color: white; padding: 0.75rem 1rem; font-weight: 600; }
+        .question-body { padding: 1rem; }
+        .question-text { font-weight: 500; margin-bottom: 1rem; color: var(--dark-blue); }
+        .options-list { list-style: none; }
+        .option { padding: 0.75rem 1rem; margin-bottom: 0.5rem; border: 2px solid #e2e8f0; border-radius: 6px; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; gap: 0.75rem; }
+        .option:hover:not(.disabled) { border-color: var(--teal); background: var(--light-teal); }
+        .option.selected { border-color: var(--dark-blue); background: #ebf8ff; }
+        .option.correct { border-color: var(--green); background: var(--light-green); }
+        .option.incorrect { border-color: var(--red); background: var(--light-red); }
+        .option.disabled { cursor: default; }
+        .option-letter { font-weight: 700; color: var(--dark-blue); min-width: 1.5rem; }
+        .option.correct .option-letter { color: var(--green); }
+        .option.incorrect .option-letter { color: var(--red); }
+        .explanation { margin-top: 1rem; padding: 1rem; background: var(--light-gray); border-radius: 6px; border-left: 4px solid var(--teal); display: none; }
+        .explanation.show { display: block; }
+        .explanation-title { font-weight: 700; color: var(--dark-blue); margin-bottom: 0.5rem; }
+        .explanation-correct { color: var(--green); font-weight: 600; margin-bottom: 0.75rem; }
+        .explanation-text { margin-bottom: 0.75rem; }
+        .explanation-wrong { font-size: 0.9rem; color: var(--medium-gray); }
+        .explanation-wrong strong { color: #1a202c; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+        .btn:hover { opacity: 0.9; }
+        .btn-primary { background: var(--teal); color: white; }
+        .btn-reset { background: var(--medium-gray); color: white; margin-left: 0.5rem; }
+        .actions { margin-top: 2rem; text-align: center; }
+        .footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.875rem; color: var(--medium-gray); }
+    </style>
+</head>
+<body>
+
+<div class="brand">CE CITIM AZI | Grile de Autoevaluare</div>
+<div class="brand-line"></div>
+
+<h1>Cefaleea</h1>
+<p class="subtitle">10 întrebări • Selectează răspunsul și verifică explicația</p>
+
+<div class="score-bar">
+    <span class="score-text">Scor curent:</span>
+    <span class="score-number" id="score">0 / 10</span>
+</div>
+
+<!-- Grila 1 -->
+<div class="question-card" data-question="1">
+    <div class="question-header">Întrebarea 1</div>
+    <div class="question-body">
+        <p class="question-text">Un bărbat de 45 de ani se prezintă cu „cea mai severă durere de cap din viața mea", cu debut brusc acum 2 ore. Care este diagnosticul cel mai probabil de exclus URGENT?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Migrenă cu aură</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Hemoragie subarahnoidiană</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Cefalee cluster</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Cefalee tensională severă</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. Hemoragie subarahnoidiană</p>
+            <p class="explanation-text">Cefaleea cu <strong>debut brusc, violent</strong> („lovitură de trăsnet" / „thunderclap headache") descrisă ca „cea mai severă din viață" este patognomonică pentru hemoragia subarahnoidiană până la proba contrarie. Necesită CT cranian URGENT și, dacă CT e negativ, puncție lombară.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A. Migrenă:</strong> Are debut progresiv (minute-ore), nu instantaneu.</p>
+                <p><strong>C. Cluster:</strong> Deși severă, are debut mai puțin brusc și semne vegetative caracteristice.</p>
+                <p><strong>D. Tensională:</strong> Nu este niciodată „cea mai severă din viață".</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 2 -->
+<div class="question-card" data-question="2">
+    <div class="question-header">Întrebarea 2</div>
+    <div class="question-body">
+        <p class="question-text">O femeie de 32 de ani prezintă episoade recurente de cefalee unilaterală, pulsatilă, cu durată de 8-12 ore, însoțită de greață și fotofobie. Crizele apar de 3-4 ori pe lună. Care este tratamentul PROFILACTIC indicat?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Sumatriptan la nevoie</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Propranolol zilnic</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Paracetamol zilnic</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Oxigen 100% pe mască</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. Propranolol zilnic</p>
+            <p class="explanation-text">Pacienta are <strong>migrenă</strong> (unilaterală, pulsatilă, greață, fotofobie). La ≥2-3 atacuri/lună, este indicat <strong>tratament profilactic</strong>. Propranololul este prima linie, alături de amitriptilină sau topirat.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A. Sumatriptan:</strong> Este tratament de criză, nu profilactic.</p>
+                <p><strong>C. Paracetamol zilnic:</strong> Poate cauza cefalee prin abuz medicamentos!</p>
+                <p><strong>D. Oxigen 100%:</strong> Este tratament pentru cefalee cluster, nu migrenă.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 3 -->
+<div class="question-card" data-question="3">
+    <div class="question-header">Întrebarea 3</div>
+    <div class="question-body">
+        <p class="question-text">Un bărbat de 55 de ani prezintă episoade de cefalee extrem de severă, strict periorbitală dreaptă, cu durată de 45-90 minute, apărute noaptea la aceeași oră. În timpul crizei are lăcrimare și rinoree pe partea dreaptă. Diagnosticul este:</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Migrenă fără aură</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Nevralgie de trigemen</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Cefalee cluster</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Sinuzită acută</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Cefalee cluster</p>
+            <p class="explanation-text">Triada clasică: <strong>durere severă periorbitală unilaterală + durată scurtă (30-120 min) + semne vegetative ipsilaterale</strong> (lăcrimare, rinoree, mioză, ptoză). Apariția nocturnă la aceeași oră („alarm clock headache") este tipică.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A. Migrenă:</strong> Durează 4-72h, nu 45-90 min. Nu are semne vegetative ipsilaterale.</p>
+                <p><strong>B. Nevralgie trigemen:</strong> Durere fulgerătoare de secunde, nu minute.</p>
+                <p><strong>D. Sinuzită:</strong> Nu apare la oră fixă și nu are rinoree doar în criză.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 4 -->
+<div class="question-card" data-question="4">
+    <div class="question-header">Întrebarea 4</div>
+    <div class="question-body">
+        <p class="question-text">În mnemonicul SNOOP4Y pentru cefaleea la copii, litera „Y" reprezintă:</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Yellowish skin (icter)</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Years old – vârsta sub 6 ani</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Yawning (căscat excesiv)</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Yesterday onset (debut de ieri)</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. Years old – vârsta sub 6 ani</p>
+            <p class="explanation-text">În SNOOP4Y, <strong>Y = Years old (&lt;6 ani)</strong>. Cefaleea primară este rară la copiii sub 6 ani – orice cefalee la această vârstă ridică suspiciunea unei cauze secundare și necesită investigații.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p>Sunt variante inventate. SNOOP4Y = Systemic symptoms, Neurologic signs, Onset sudden, Occipital, Precipitated by Valsalva, Positional, Progressive, Parents (fără AHC), Years old (&lt;6).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 5 -->
+<div class="question-card" data-question="5">
+    <div class="question-header">Întrebarea 5</div>
+    <div class="question-body">
+        <p class="question-text">O pacientă de 28 de ani, însărcinată în 20 de săptămâni, prezintă o criză de migrenă. Care medicament este CONTRAINDICAT?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Paracetamol</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Sumatriptan</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Metoclopramid</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Repaus la întuneric</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. Sumatriptan</p>
+            <p class="explanation-text"><strong>Triptanii sunt contraindicați în sarcină</strong> din cauza riscului teoretic de vasoconstricție. În sarcină, tratamentul migrenei se face cu paracetamol, antiemetice (metoclopramid) și măsuri non-farmacologice.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A. Paracetamol:</strong> Sigur în sarcină, prima linie.</p>
+                <p><strong>C. Metoclopramid:</strong> Acceptabil pentru greața asociată.</p>
+                <p><strong>D. Repaus:</strong> Evident sigur și recomandat.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 6 -->
+<div class="question-card" data-question="6">
+    <div class="question-header">Întrebarea 6</div>
+    <div class="question-body">
+        <p class="question-text">Un pacient de 60 de ani prezintă cefalee care îl trezește din somn zilnic de 2 săptămâni, fără alte simptome neurologice. TA normală. Care este cea mai probabilă cauză?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Cefalee tensională</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Migrenă</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Cefalee hipnică</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Nevralgie de trigemen</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Cefalee hipnică</p>
+            <p class="explanation-text"><strong>Cefaleea hipnică</strong> apare exclusiv la vârstnici (&gt;50 ani), trezește pacientul din somn la oră fixă, și nu are alte simptome. Este o cefalee primară benignă, dar trebuie exclusă tumora cerebrală prin imagistică.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A. Tensională:</strong> NU trezește din somn („doarme" noaptea).</p>
+                <p><strong>B. Migrenă:</strong> Poate trezi, dar are alte caracteristici (fotofobie, greață).</p>
+                <p><strong>D. Nevralgie trigemen:</strong> Durere fulgerătoare, nu nocturnă specific.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 7 -->
+<div class="question-card" data-question="7">
+    <div class="question-header">Întrebarea 7</div>
+    <div class="question-body">
+        <p class="question-text">Care caracteristică diferențiază cel mai bine cefaleea tensională de migrenă?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Durata crizei</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Caracterul bilateral și non-pulsatil</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Răspunsul la paracetamol</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Prezența stresului ca trigger</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. Caracterul bilateral și non-pulsatil</p>
+            <p class="explanation-text">Cefaleea tensională: <strong>bilaterală, „în menghină", presiune constantă</strong>. Migrena: <strong>unilaterală, pulsatilă</strong>. Aceasta este diferența clinică esențială.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A. Durata:</strong> Ambele pot dura ore-zile.</p>
+                <p><strong>C. Răspuns paracetamol:</strong> Ambele pot răspunde.</p>
+                <p><strong>D. Stres:</strong> Poate declanșa ambele tipuri.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 8 -->
+<div class="question-card" data-question="8">
+    <div class="question-header">Întrebarea 8</div>
+    <div class="question-body">
+        <p class="question-text">Un pacient cu istoric de cefalee cronică zilnică ia ibuprofen în fiecare zi de 3 luni. Ce complicație este FOARTE probabilă?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Cefalee prin abuz medicamentos</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Transformare în migrenă</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Dezvoltarea cefaleei cluster</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Hemoragie cerebrală</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: A. Cefalee prin abuz medicamentos</p>
+            <p class="explanation-text"><strong>Cefaleea prin abuz medicamentos</strong> (medication overuse headache) apare paradoxal la pacienții care iau analgezice >15 zile/lună timp de >3 luni. Tratamentul = întreruperea analgezicului „vinovat" (cu cefalee de rebound temporară).</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>B, C:</strong> Nu există „transformare" în alt tip de cefalee primară.</p>
+                <p><strong>D:</strong> Ibuprofenul nu cauzează hemoragie cerebrală (doar GI în exces).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 9 -->
+<div class="question-card" data-question="9">
+    <div class="question-header">Întrebarea 9</div>
+    <div class="question-body">
+        <p class="question-text">Triada clasică pentru meningită este:</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>Cefalee + Vărsături + Convulsii</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>Cefalee + Febră + Redoare de ceafă</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Cefalee + Fotofobie + Vertij</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Cefalee + Bradicardie + Hipertensiune</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: B. Cefalee + Febră + Redoare de ceafă</p>
+            <p class="explanation-text">Triada clasică a meningitei: <strong>cefalee difuză severă + febră + redoare de ceafă</strong> (semne de iritație meningeală). Confirmarea se face prin puncție lombară.</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A:</strong> Convulsiile pot apărea, dar nu fac parte din triada clasică.</p>
+                <p><strong>C:</strong> Fotofobie apare în migrenă, vertijul nu e specific.</p>
+                <p><strong>D:</strong> Aceasta e triada Cushing (hipertensiune intracraniană).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Grila 10 -->
+<div class="question-card" data-question="10">
+    <div class="question-header">Întrebarea 10</div>
+    <div class="question-body">
+        <p class="question-text">Un pacient de 70 de ani prezintă cefalee temporală unilaterală de 2 săptămâni, cu sensibilitate la palparea scalpului și claudicație mandibulară. VSH = 85 mm/h. Ce investigație confirmă diagnosticul?</p>
+        <ul class="options-list">
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">A.</span>
+                <span>CT cerebral</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">B.</span>
+                <span>RMN cerebral</span>
+            </li>
+            <li class="option" data-correct="true" onclick="selectOption(this)">
+                <span class="option-letter">C.</span>
+                <span>Biopsie de arteră temporală</span>
+            </li>
+            <li class="option" data-correct="false" onclick="selectOption(this)">
+                <span class="option-letter">D.</span>
+                <span>Puncție lombară</span>
+            </li>
+        </ul>
+        <div class="explanation">
+            <div class="explanation-title">Explicație</div>
+            <p class="explanation-correct">✓ Răspuns corect: C. Biopsie de arteră temporală</p>
+            <p class="explanation-text">Tabloul este clasic pentru <strong>arterita temporală (cu celule gigante)</strong>: vârstă >50 ani, cefalee temporală, sensibilitate scalp, claudicație mandibulară, VSH foarte crescut. Biopsia de arteră temporală confirmă diagnosticul. <strong>URGENȚĂ</strong>: risc de orbire fără tratament!</p>
+            <div class="explanation-wrong">
+                <p><strong>De ce celelalte sunt greșite:</strong></p>
+                <p><strong>A, B (CT/RMN):</strong> Nu evidențiază arterita.</p>
+                <p><strong>D (PL):</strong> LCR e normal în arterita temporală.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="actions">
+    <button class="btn btn-primary" onclick="showAllExplanations()">Arată toate explicațiile</button>
+    <button class="btn btn-reset" onclick="resetQuiz()">Resetează</button>
+</div>
+
+<div class="footer">
+    <p>Ce Citim Azi – Grile de autoevaluare pentru rezidenți MF</p>
+    <p>Capitol: Cefaleea</p>
+</div>
+
+<script>
+    let score = 0;
+    let answered = new Set();
+    
+    function selectOption(element) {
+        const card = element.closest('.question-card');
+        const questionNum = card.dataset.question;
+        if (answered.has(questionNum)) return;
+        answered.add(questionNum);
+        const options = card.querySelectorAll('.option');
+        options.forEach(opt => opt.classList.add('disabled'));
+        const isCorrect = element.dataset.correct === 'true';
+        if (isCorrect) {
+            element.classList.add('correct');
+            score++;
+        } else {
+            element.classList.add('incorrect');
+            options.forEach(opt => {
+                if (opt.dataset.correct === 'true') opt.classList.add('correct');
+            });
+        }
+        card.querySelector('.explanation').classList.add('show');
+        document.getElementById('score').textContent = score + ' / 10';
+    }
+    
+    function showAllExplanations() {
+        document.querySelectorAll('.explanation').forEach(exp => exp.classList.add('show'));
+        document.querySelectorAll('.question-card').forEach(card => {
+            const questionNum = card.dataset.question;
+            if (!answered.has(questionNum)) {
+                const options = card.querySelectorAll('.option');
+                options.forEach(opt => {
+                    opt.classList.add('disabled');
+                    if (opt.dataset.correct === 'true') opt.classList.add('correct');
+                });
+                answered.add(questionNum);
+            }
+        });
+    }
+    
+    function resetQuiz() {
+        score = 0;
+        answered = new Set();
+        document.getElementById('score').textContent = '0 / 10';
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.classList.remove('selected', 'correct', 'incorrect', 'disabled');
+        });
+        document.querySelectorAll('.explanation').forEach(exp => exp.classList.remove('show'));
+    }
+</script>
+
+</body>
+</html>

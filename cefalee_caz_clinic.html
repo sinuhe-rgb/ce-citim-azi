@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caz Clinic | Cefaleea</title>
+    <style>
+        :root {
+            --dark-blue: #1a365d;
+            --teal: #319795;
+            --purple: #6b46c1;
+            --orange: #dd6b20;
+            --red: #e53e3e;
+            --green: #38a169;
+            --light-gray: #f7fafc;
+            --medium-gray: #718096;
+            --light-teal: #e6fffa;
+            --light-purple: #faf5ff;
+            --light-orange: #fffaf0;
+            --light-green: #f0fff4;
+            --light-red: #fff5f5;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .brand { font-weight: 700; font-size: 0.875rem; color: var(--teal); margin-bottom: 0.5rem; }
+        .brand-line { height: 3px; background: var(--teal); margin-bottom: 1.5rem; }
+        h1 { font-size: 1.75rem; color: var(--dark-blue); margin-bottom: 0.25rem; }
+        .subtitle { font-size: 1rem; color: var(--medium-gray); margin-bottom: 1.5rem; }
+        .progress-container { background: #e2e8f0; border-radius: 10px; height: 8px; margin-bottom: 2rem; }
+        .progress-bar { background: var(--teal); height: 100%; width: 0%; transition: width 0.5s ease; border-radius: 10px; }
+        .step { display: none; animation: fadeIn 0.5s ease; }
+        .step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .case-box { background: var(--light-gray); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; border-left: 4px solid var(--dark-blue); }
+        .case-title { font-weight: 700; color: var(--dark-blue); margin-bottom: 0.75rem; }
+        .warning-box { border-left-color: var(--orange); }
+        .warning-box .case-title { color: var(--orange); }
+        .alert-box { border-left-color: var(--red); }
+        .alert-box .case-title { color: var(--red); }
+        .question-box { background: white; border: 2px solid var(--teal); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; }
+        .question-title { font-weight: 700; color: var(--teal); margin-bottom: 1rem; }
+        .options-grid { display: grid; gap: 0.75rem; }
+        .option-btn { padding: 1rem; border: 2px solid #e2e8f0; border-radius: 8px; background: white; text-align: left; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
+        .option-btn:hover:not(.disabled) { border-color: var(--teal); background: var(--light-teal); }
+        .option-btn.selected { border-color: var(--dark-blue); background: #ebf8ff; }
+        .option-btn.disabled { cursor: default; opacity: 0.7; }
+        .continue-btn { display: none; margin-top: 1.5rem; padding: 0.875rem 2rem; background: var(--teal); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .continue-btn.show { display: inline-block; }
+        .results-box { background: var(--light-teal); border-radius: 8px; padding: 1.25rem; margin-bottom: 1rem; border-left: 4px solid var(--teal); }
+        .results-title { font-weight: 700; color: var(--dark-blue); margin-bottom: 0.75rem; }
+        .analysis-header { background: var(--dark-blue); color: white; padding: 0.75rem 1rem; border-radius: 8px 8px 0 0; font-weight: 700; }
+        .analysis-content { background: var(--light-gray); padding: 1.5rem; border-radius: 0 0 8px 8px; }
+        .diagnosis-box { background: var(--light-green); border-left: 4px solid var(--green); padding: 1rem; margin-bottom: 1rem; border-radius: 0 8px 8px 0; }
+        .diagnosis-title { font-weight: 700; color: var(--green); margin-bottom: 0.5rem; }
+        .your-choices { background: white; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+        .choice-item { padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0; }
+        .choice-item:last-child { border-bottom: none; }
+        .choice-label { font-weight: 600; color: var(--medium-gray); font-size: 0.85rem; }
+        .optimal { color: var(--green); }
+        .suboptimal { color: var(--orange); }
+        .diff-item { padding: 0.75rem; margin-bottom: 0.5rem; border-radius: 6px; background: white; }
+        .diff-item.confirmed { border-left: 4px solid var(--green); }
+        .diff-item.excluded { border-left: 4px solid var(--red); opacity: 0.8; }
+        .learning-box { background: var(--light-purple); border-left: 4px solid var(--purple); padding: 1rem; margin-top: 1.5rem; border-radius: 0 8px 8px 0; }
+        .learning-title { font-weight: 700; color: var(--purple); margin-bottom: 0.75rem; }
+        .score-box { text-align: center; padding: 1.5rem; background: var(--light-teal); border-radius: 8px; margin-top: 1.5rem; }
+        .score-value { font-size: 2rem; font-weight: 700; color: var(--teal); }
+        .restart-btn { display: block; margin: 2rem auto 0; padding: 0.875rem 2rem; background: var(--medium-gray); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e2e8f0; text-align: center; font-size: 0.875rem; color: var(--medium-gray); }
+        ul { margin-left: 1.5rem; margin-top: 0.5rem; }
+        li { margin-bottom: 0.35rem; }
+    </style>
+</head>
+<body>
+
+<div class="brand">CE CITIM AZI | Caz Clinic Interactiv</div>
+<div class="brand-line"></div>
+<h1>Cazul Doamnei Marinescu</h1>
+<p class="subtitle">Parcurge cazul și ia decizii clinice • Analiza la final</p>
+<div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- STEP 1 -->
+<div class="step active" id="step1">
+    <div class="case-box">
+        <div class="case-title">📋 Prezentarea cazului</div>
+        <p><em>Luni dimineața, ora 8:15. Cabinet de Medicină de Familie.</em></p>
+        <p style="margin-top:1rem"><strong>Elena Marinescu</strong>, 74 ani, pensionară, vine pentru cefalee de 10 zile.</p>
+        <p style="margin-top:1rem"><em>„Domnule doctor, mă doare capul de vreo 10 zile, în partea stângă, pe tâmplă. Am luat Nurofen, nu-mi trece. Și parcă mă doare și când mestec..."</em></p>
+        <ul style="margin-top:1rem">
+            <li>Durere localizată temporal stâng</li>
+            <li>Intensitate moderată-severă</li>
+            <li>Nu a avut niciodată astfel de dureri înainte</li>
+            <li>„Mă simt slăbită în ultima vreme"</li>
+        </ul>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Ce întrebări sunt CRITICE în acest moment?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(1,this,'A')">A. Istoric de migrenă în familie, consum de cafea</button>
+            <button class="option-btn" onclick="select(1,this,'B')">B. Durere la pieptănat/atingerea scalpului, probleme de vedere recente</button>
+            <button class="option-btn" onclick="select(1,this,'C')">C. Nivel de stres, probleme la serviciu, calitatea somnului</button>
+            <button class="option-btn" onclick="select(1,this,'D')">D. Alergii medicamentoase, istoric de sinuzită</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont1" onclick="goTo(2)">Continuă →</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step" id="step2">
+    <div class="results-box">
+        <div class="results-title">📝 Informații din anamneză</div>
+        <p><strong>Simptome suplimentare:</strong></p>
+        <ul>
+            <li><strong>DA</strong> – durere la atingerea scalpului pe partea stângă</li>
+            <li><strong>DA</strong> – durere la mestecat care o obligă să se oprească („claudicație mandibulară")</li>
+            <li>Vederea „e mai încețoșată de câteva zile" pe ochiul stâng</li>
+            <li>Stare generală alterată, scădere ponderală 3 kg în ultima lună</li>
+            <li>Dureri la nivelul umerilor și șoldurilor dimineața</li>
+        </ul>
+        <p style="margin-top:1rem"><strong>APP:</strong> HTA tratată cuAzomex. Fără diabet, fără AVC.</p>
+    </div>
+    <div class="case-box alert-box">
+        <div class="case-title">🚨 Red flags identificate!</div>
+        <ul>
+            <li>Cefalee cu debut NOU la >50 ani</li>
+            <li>Sensibilitate scalp la palpare</li>
+            <li>Claudicație mandibulară</li>
+            <li>Tulburări de vedere recente</li>
+            <li>Simptome constituționale (slăbiciune, scădere ponderală)</li>
+        </ul>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Ce examen fizic este ESENȚIAL?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(2,this,'A')">A. Palparea arterelor temporale + Examen fund de ochi</button>
+            <button class="option-btn" onclick="select(2,this,'B')">B. Examen neurologic complet + Semne meningeale</button>
+            <button class="option-btn" onclick="select(2,this,'C')">C. Palparea sinusurilor + Examen ORL</button>
+            <button class="option-btn" onclick="select(2,this,'D')">D. Măsurarea TA în ambele brațe + EKG</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont2" onclick="goTo(3)">Continuă →</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="step" id="step3">
+    <div class="results-box">
+        <div class="results-title">🩺 Examen fizic</div>
+        <p><strong>General:</strong> Pacientă palidă, subfebrilă (37.4°C). TA = 145/85 mmHg.</p>
+        <p><strong>Artera temporală stângă:</strong> Îngroșată, indurată, sensibilă la palpare, <strong>puls diminuat</strong>.</p>
+        <p><strong>Fund de ochi:</strong> Disc optic ușor palid pe stânga (suspiciune de ischemie).</p>
+        <p><strong>Neurologic:</strong> Fără deficit motor/senzitiv. Pupile reactive.</p>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Ce investigații soliciți URGENT?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(3,this,'A')">A. CT cerebral nativ, apoi cu contrast</button>
+            <button class="option-btn" onclick="select(3,this,'B')">B. VSH + PCR + Hemoleucogramă</button>
+            <button class="option-btn" onclick="select(3,this,'C')">C. RMN cerebral + Angio-RMN</button>
+            <button class="option-btn" onclick="select(3,this,'D')">D. Puncție lombară</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont3" onclick="goTo(4)">Continuă →</button>
+</div>
+
+<!-- STEP 4 -->
+<div class="step" id="step4">
+    <div class="results-box">
+        <div class="results-title">🔬 Rezultate investigații</div>
+        <p><strong>VSH = 92 mm/h</strong> (N: &lt;20)</p>
+        <p><strong>PCR = 78 mg/L</strong> (N: &lt;5)</p>
+        <p><strong>Hemoglobină = 10.9 g/dL</strong> (anemie ușoară)</p>
+        <p><strong>Trombocite = 450,000/mm³</strong> (ușor crescute)</p>
+        <p style="margin-top:1rem"><em>Sindrom inflamator sever + anemie de boală cronică + trombocitoză reactivă.</em></p>
+    </div>
+    <div class="case-box warning-box">
+        <div class="case-title">⚠️ Situație urgentă!</div>
+        <p>Tabloul clinic + biologic sugerează puternic <strong>arterită cu celule gigante</strong>. Pacientă cu risc de <strong>ORBIRE</strong> prin neuropatie optică ischemică dacă nu se tratează imediat!</p>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Care este atitudinea IMEDIATĂ?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(4,this,'A')">A. Trimitere la oftalmolog pentru consult, apoi decidem</button>
+            <button class="option-btn" onclick="select(4,this,'B')">B. Prednison doză mare ACUM + Trimitere urgentă pentru biopsie arteră temporală</button>
+            <button class="option-btn" onclick="select(4,this,'C')">C. Așteptăm biopsia de arteră temporală înainte de orice tratament</button>
+            <button class="option-btn" onclick="select(4,this,'D')">D. AINS în doză mai mare + programare RMN săptămâna viitoare</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont4" onclick="goTo(5)">Continuă →</button>
+</div>
+
+<!-- STEP 5 -->
+<div class="step" id="step5">
+    <div class="results-box">
+        <div class="results-title">📅 Evoluție la 48 de ore</div>
+        <p>Pacienta a primit <strong>Prednison 60 mg/zi</strong> imediat.</p>
+        <ul style="margin-top:0.75rem">
+            <li>Cefalea s-a ameliorat dramatic în 24 de ore</li>
+            <li>Vederea s-a stabilizat (nu s-a agravat)</li>
+            <li>Biopsia de arteră temporală este programată</li>
+        </ul>
+    </div>
+    <div class="question-box">
+        <div class="question-title">Biopsia revine NEGATIVĂ (fără celule gigante). Ce faci?</div>
+        <div class="options-grid">
+            <button class="option-btn" onclick="select(5,this,'A')">A. Opresc corticoterapia – nu era arterită</button>
+            <button class="option-btn" onclick="select(5,this,'B')">B. Continui Prednisonul – biopsia poate fi fals negativă</button>
+            <button class="option-btn" onclick="select(5,this,'C')">C. Reduc rapid Prednisonul la 10 mg și reevaluez</button>
+            <button class="option-btn" onclick="select(5,this,'D')">D. Înlocuiesc cu AINS și monitorizez VSH</button>
+        </div>
+    </div>
+    <button class="continue-btn" id="cont5" onclick="goTo(6)">Vezi rezultatul final →</button>
+</div>
+
+<!-- STEP 6: FINAL -->
+<div class="step" id="step6">
+    <div class="results-box">
+        <div class="results-title">🔍 Evoluție finală</div>
+        <p>Sub Prednison, pacienta a rămas asimptomatică. VSH s-a normalizat în 4 săptămâni.</p>
+        <p style="margin-top:0.75rem">Reducerea treptată a corticoterapiei peste 12-18 luni, fără recădere.</p>
+        <p style="margin-top:0.75rem"><strong>Vederea a fost salvată.</strong></p>
+    </div>
+
+    <div class="analysis-header">📊 ANALIZA CAZULUI</div>
+    <div class="analysis-content">
+        <div class="diagnosis-box">
+            <div class="diagnosis-title">✓ Diagnostic final</div>
+            <p><strong>Arterită temporală (cu celule gigante)</strong></p>
+            <p style="font-size:0.9rem;color:var(--medium-gray);margin-top:0.5rem">Confirmată clinic și prin răspunsul la tratament, chiar cu biopsie negativă (sensibilitate biopsie ~85%)</p>
+        </div>
+
+        <h3 style="color:var(--dark-blue);margin-bottom:0.75rem">Alegerile tale:</h3>
+        <div class="your-choices" id="choicesSummary"></div>
+
+        <h3 style="color:var(--dark-blue);margin:1.5rem 0 0.75rem">Diagnostic diferențial discutat:</h3>
+        <div class="diff-item confirmed">
+            <strong>Arterită temporală (cu celule gigante)</strong> ✓ CONFIRMAT
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Vârstă >50, cefalee temporală nouă, claudicație mandibulară, sensibilitate scalp, VSH foarte crescut, răspuns dramatic la corticoizi.</p>
+        </div>
+        <div class="diff-item excluded">
+            <strong>Migrenă</strong> – Exclusă
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Nu debutează la 74 de ani. Nu explică sindromul inflamator.</p>
+        </div>
+        <div class="diff-item excluded">
+            <strong>Cefalee tensională</strong> – Exclusă
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Nu cauzează sensibilitate la palpare sau claudicație mandibulară.</p>
+        </div>
+        <div class="diff-item excluded">
+            <strong>Tumoră cerebrală</strong> – Exclusă
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Nu explică VSH crescut sau arteră temporală indurată.</p>
+        </div>
+        <div class="diff-item excluded">
+            <strong>Meningită</strong> – Exclusă
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Fără febră înaltă, fără redoare de ceafă, localizare temporală.</p>
+        </div>
+
+        <div class="learning-box">
+            <div class="learning-title">📚 Lecții cheie din acest caz</div>
+            <ul>
+                <li><strong>Cefalee nouă la >50 ani</strong> = red flag major. Nu este „doar migrenă"!</li>
+                <li><strong>Claudicația mandibulară</strong> este aproape patognomonică pentru arterita temporală.</li>
+                <li><strong>VSH >50 mm/h</strong> la vârstnic cu cefalee temporală = arterită până la proba contrarie.</li>
+                <li><strong>NU aștepta biopsia!</strong> Tratamentul cu corticoizi se începe IMEDIAT – vederea e în pericol.</li>
+                <li><strong>Biopsia negativă nu exclude diagnosticul</strong> – afectarea poate fi segmentară (skip lesions).</li>
+                <li><strong>Răspunsul la corticoizi</strong> este atât de rapid și dramatic încât are valoare diagnostică.</li>
+            </ul>
+        </div>
+
+        <div class="score-box">
+            <p style="font-size:0.9rem;color:var(--medium-gray)">Scorul tău</p>
+            <div class="score-value" id="finalScore">0/5</div>
+            <p style="font-size:0.9rem;color:var(--medium-gray);margin-top:0.5rem" id="scoreMsg"></p>
+        </div>
+    </div>
+
+    <button class="restart-btn" onclick="location.reload()">Reia cazul</button>
+</div>
+
+<div class="footer">
+    <p>Ce Citim Azi – Caz clinic interactiv pentru rezidenți MF</p>
+    <p>Capitol: Cefaleea</p>
+</div>
+
+<script>
+const optimal = {1:'B', 2:'A', 3:'B', 4:'B', 5:'B'};
+const choices = {};
+const labels = {
+    1: 'Anamneză',
+    2: 'Examen fizic', 
+    3: 'Investigații',
+    4: 'Tratament inițial',
+    5: 'Biopsie negativă'
+};
+const explanations = {
+    1: {
+        'A': 'Irelevant – migrena nu debutează la 74 ani.',
+        'B': 'OPTIM! Sensibilitatea scalpului și tulburările de vedere sunt red flags pentru arterită temporală.',
+        'C': 'Nu e cefalee tensională – vârsta și debutul nou exclud această ipoteză.',
+        'D': 'Sinuzita nu explică tabloul clinic.'
+    },
+    2: {
+        'A': 'OPTIM! Artera temporală indurată + fundul de ochi sunt esențiale pentru diagnostic.',
+        'B': 'Util dar nu prioritar – nu e suspiciune de meningită.',
+        'C': 'Nu e sinuzită – localizarea și vârsta nu corespund.',
+        'D': 'Nu e criză hipertensivă sau disecție de aortă.'
+    },
+    3: {
+        'A': 'CT-ul nu evidențiază arterita temporală.',
+        'B': 'OPTIM! VSH și PCR sunt cruciale – VSH >50 are sensibilitate ~85% pentru arterită.',
+        'C': 'Util pentru alte cauze, dar nu prioritar aici.',
+        'D': 'Nu e meningită – fără indicație de PL.'
+    },
+    4: {
+        'A': 'Întârzie tratamentul – risc de orbire în ore-zile!',
+        'B': 'OPTIM! Corticoterapia se începe IMEDIAT, nu așteptăm biopsia. Biopsia rămâne pozitivă 2 săptămâni sub tratament.',
+        'C': 'GREȘIT – fiecare zi fără tratament crește riscul de orbire!',
+        'D': 'PERICULOS – AINS nu previn complicațiile ischemice!'
+    },
+    5: {
+        'A': 'GREȘIT – biopsia are sensibilitate ~85%, poate fi fals negativă!',
+        'B': 'OPTIM! Diagnosticul e clinic + răspuns la tratament. Biopsia negativă nu exclude arterita (skip lesions).',
+        'C': 'Prea agresiv – risc de recădere.',
+        'D': 'PERICULOS – AINS nu previn orbirea!'
+    }
+};
+
+function select(step, btn, val) {
+    const btns = btn.parentElement.querySelectorAll('.option-btn');
+    btns.forEach(b => { b.classList.remove('selected'); b.classList.add('disabled'); });
+    btn.classList.add('selected');
+    choices[step] = val;
+    document.getElementById('cont'+step).classList.add('show');
+}
+
+function goTo(step) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step'+step).classList.add('active');
+    document.getElementById('progressBar').style.width = ((step-1)/5*100)+'%';
+    if(step === 6) showFinal();
+    window.scrollTo(0,0);
+}
+
+function showFinal() {
+    document.getElementById('progressBar').style.width = '100%';
+    let score = 0;
+    let html = '';
+    for(let i=1; i<=5; i++) {
+        const c = choices[i] || '-';
+        const isOpt = c === optimal[i];
+        if(isOpt) score++;
+        html += `<div class="choice-item">
+            <div class="choice-label">${labels[i]}</div>
+            <div class="choice-value ${isOpt?'optimal':'suboptimal'}">${c}. ${isOpt?'✓ Optim':'Suboptim'}</div>
+            <div style="font-size:0.85rem;color:var(--medium-gray);margin-top:0.25rem">${explanations[i][c]||''}</div>
+        </div>`;
+    }
+    document.getElementById('choicesSummary').innerHTML = html;
+    document.getElementById('finalScore').textContent = score+'/5';
+    const msgs = ['Recitește capitolul!','Poți mai bine!','Bine!','Foarte bine!','Excelent!','Perfectionist!'];
+    document.getElementById('scoreMsg').textContent = msgs[score];
+}
+</script>
+</body>
+</html>

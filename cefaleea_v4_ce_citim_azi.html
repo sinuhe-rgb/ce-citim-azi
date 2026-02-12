@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ce Citim Azi | Cefaleea</title>
+    <style>
+        :root {
+            --dark-blue: #1a365d;
+            --teal: #319795;
+            --purple: #6b46c1;
+            --orange: #dd6b20;
+            --red: #e53e3e;
+            --light-gray: #f7fafc;
+            --medium-gray: #718096;
+            --light-teal: #e6fffa;
+            --light-purple: #faf5ff;
+            --light-orange: #fffaf0;
+            --light-red: #fff5f5;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a202c;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .brand { font-weight: 700; font-size: 0.875rem; color: var(--teal); margin-bottom: 0.5rem; }
+        .brand-line { height: 3px; background: var(--teal); margin-bottom: 1.5rem; }
+        h1 { font-size: 2rem; color: var(--dark-blue); margin-bottom: 0.25rem; }
+        .subtitle { font-size: 1.125rem; font-style: italic; color: var(--teal); margin-bottom: 1.5rem; }
+        
+        .box { border-radius: 6px; padding: 1rem 1rem 1rem 1.25rem; margin-bottom: 1rem; border-left: 4px solid; }
+        .box-teal { background: var(--light-teal); border-color: var(--teal); }
+        .box-purple { background: var(--light-purple); border-color: var(--purple); }
+        .box-orange { background: var(--light-orange); border-color: var(--orange); }
+        .box-red { background: var(--light-red); border-color: var(--red); }
+        .box-title { font-weight: 700; margin-bottom: 0.5rem; }
+        .box-teal .box-title { color: var(--dark-blue); }
+        .box-purple .box-title { color: var(--purple); }
+        .box-orange .box-title { color: var(--orange); }
+        .box-red .box-title { color: var(--red); }
+        
+        .section-header { color: white; padding: 0.5rem 1rem; border-radius: 4px; font-weight: 700; margin: 1.5rem 0 1rem 0; }
+        .section-header.blue { background: var(--dark-blue); }
+        .section-header.purple { background: var(--purple); }
+        .section-header.teal { background: var(--teal); }
+        .section-header.orange { background: var(--orange); }
+        
+        h2 { font-size: 1.125rem; color: var(--dark-blue); margin: 1.25rem 0 0.75rem 0; }
+        h3 { font-size: 1rem; color: var(--teal); margin: 1rem 0 0.5rem 0; }
+        p { margin-bottom: 0.75rem; }
+        ul { margin: 0.5rem 0 1rem 1.5rem; }
+        li { margin-bottom: 0.35rem; }
+        
+        .table-caption { font-size: 0.875rem; font-style: italic; color: var(--medium-gray); margin-bottom: 0.5rem; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; }
+        th { background: var(--dark-blue); color: white; padding: 0.5rem; text-align: left; font-weight: 600; }
+        th.teal { background: var(--teal); }
+        td { padding: 0.5rem; border: 1px solid #e2e8f0; vertical-align: top; }
+        tr:nth-child(even) { background: var(--light-gray); }
+        tr.highlight-red { background: var(--light-red); }
+        .cell-bold { font-weight: 600; }
+        
+        .snoop-table td:first-child { font-weight: 700; color: var(--red); text-align: center; font-size: 1.1rem; }
+        
+        .condition-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 1rem; margin: 1rem 0; }
+        .condition-box h4 { color: var(--dark-blue); margin: 0 0 0.5rem 0; font-size: 1rem; }
+        .condition-box ul { margin-bottom: 0; }
+        
+        .footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--medium-gray); text-align: center; font-size: 0.875rem; color: var(--medium-gray); }
+        
+        @media (max-width: 600px) {
+            body { padding: 15px; font-size: 15px; }
+            h1 { font-size: 1.5rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="brand">CE CITIM AZI | Seria de Rezumate pentru Rezidenți MF</div>
+<div class="brand-line"></div>
+
+<h1>Cefaleea</h1>
+<p class="subtitle">Clasificare, Diagnostic și Management</p>
+
+<div class="box box-teal">
+    <div class="box-title">De ce contează acest capitol?</div>
+    <p>Cefaleea este unul dintre cele mai frecvente simptome întâlnite în practica medicului de familie, având cauze extrem de variate, de la benigne la amenințătoare de viață. Provocarea majoră nu este doar tratamentul durerii, ci capacitatea de a discrimina rapid între o cefalee primară (migrenă, tensională) și una secundară (tumoră, meningită, AVC). O anamneză corectă poate salva viața unui pacient cu hemoragie subarahnoidiană sau poate îmbunătăți semnificativ calitatea vieții unui pacient cu migrenă cronică.</p>
+</div>
+
+<div class="section-header blue">● IDEILE PRINCIPALE</div>
+
+<h2>1. Clasificare și Terminologie</h2>
+<p>Conform International Headache Society (IHS), cefaleea se împarte în două mari categorii:</p>
+<ul>
+    <li><strong>Cefalee primară:</strong> Fără un substrat patologic obiectiv sau leziune structurală (ex: migrena, cefaleea tensională, cluster).</li>
+    <li><strong>Cefalee secundară:</strong> Simptom al unei patologii subiacente (ex: traumatism, infecție, patologie vasculară, sevraj).</li>
+</ul>
+
+<p class="table-caption">Tabelul 4.1.6.1. Clasificarea cefaleelor primare (IHS, 2013)</p>
+<table>
+    <tr><th>Categorie</th><th>Subtipuri</th></tr>
+    <tr>
+        <td class="cell-bold">1. Migrena</td>
+        <td>Migrena fără aură • Migrena cu aură • Migrena cronică • Status migrenos</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">2. Cefaleea de tip tensional</td>
+        <td>Cu crize rare • Cu crize frecvente • Cronică</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">3. Cefalalgii trigeminal-vegetative</td>
+        <td>Cluster episodică/cronică • Hemicrania paroxistică/continuă • Cefaleea nevralgiformă unilaterală de scurtă durată cu/fără hiperemie conjunctivală și lacrimație</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">4. Alte cefalee primare</td>
+        <td>Cefaleea „în lovitură de pumnal" • Cefaleea la tuse • Cefaleea legată de efort fizic • Cefaleea asociată cu activitatea sexuală • Cefaleea hipnică</td>
+    </tr>
+</table>
+
+<p class="table-caption">Tabelul 4.1.6.2. Clasificarea cefaleelor secundare (IHS, 2013)</p>
+<table>
+    <tr><th>Categorie</th><th>Subtipuri</th></tr>
+    <tr>
+        <td class="cell-bold">1. Traumatism cranian/cervical</td>
+        <td>Cefaleea posttraumatică acută/cronică • Traumatism „în lovitură de bici" • Hematom intracranian/epidural/subdural • Postcraniotomie</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">2. Patologie vasculară cerebrală/cervicală</td>
+        <td>AVC ischemic/AIT • Hemoragii intracraniene (intracerebrale, subarahnoidiene, subdurale) • Malformații vasculare • Arterită cu celule gigante • Patologie carotidă/vertebrală • Tromboză venoasă cerebrală</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">3. Afecțiuni intracraniene nevasculare</td>
+        <td>Presiune LCR crescută/scăzută • Boli inflamatorii neinfecțioase • Neoplasm intracranian • Criză epileptică • Malformația Chiari tip I</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">4. Substanțe/Sevraj/Abuz medicamentos</td>
+        <td>Donori NO, inhibitori fosfodiesterazei, CO, alcool, glutamat monosodic, cocaină, canabis • Abuz ergotamină, triptani, analgezice • Sevraj cofeină, opioizi, estrogeni</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">5. Infecții</td>
+        <td>Meningite, encefalite (bacteriene, virale, fungice) • Abces cerebral • Empiem subdural • Infecții sistemice</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">6. Tulburări de homeostazie</td>
+        <td>Hipoxie/hipercapnie (altitudine, apnee în somn) • HTA (criză, encefalopatie, preeclampsie) • Hipotiroidism • Inanție • Cefalalgii cardiace</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">7. Patologie craniană/facială</td>
+        <td>Afecțiuni osoase • Cefalee cervicogenă • Glaucom acut • Vicii de refracție • Rinosinuzite • Afecțiuni dentare/ATM</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">8. Afecțiuni psihice</td>
+        <td>Tulburări de somatizare • Tulburări psihotice</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">9. Nevralgii craniene</td>
+        <td>Nevralgia trigeminală, glosofaringiană, facială, occipitală • Nevrita optică</td>
+    </tr>
+    <tr>
+        <td class="cell-bold">10. Alte cefalee</td>
+        <td>Herpes zoster • Sindromul „gurii arzânde" • Cefaleea neclasificată</td>
+    </tr>
+</table>
+
+<h2>2. Diagnostic: Anamneza și Examenul Clinic</h2>
+<p>De cele mai multe ori, examenul clinic este normal, iar <strong>anamneza este cheia diagnosticului</strong>. Se recomandă întrebări deschise pentru a caracteriza durerea.</p>
+
+<p class="table-caption">Tabelul 4.1.6.3. Întrebări deschise folosite în evaluarea cefaleei</p>
+<table>
+    <tr><th style="width: 5%">Nr.</th><th>Întrebare</th></tr>
+    <tr><td>1</td><td>De când vă doare capul?</td></tr>
+    <tr><td>2</td><td>Unde este localizată durerea? Dacă iradiază, unde iradiază?</td></tr>
+    <tr><td>3</td><td>Care este caracterul durerii? Este pulsatilă sau nu?</td></tr>
+    <tr><td>4</td><td>Cât de severă este durerea de cap?</td></tr>
+    <tr><td>5</td><td>Este primul episod? Dacă nu, care este frecvența și durata lor?</td></tr>
+    <tr><td>6</td><td>Cât timp durează durerile de cap?</td></tr>
+    <tr><td>7</td><td>În ce moment al zilei apar și ce factori declanșează durerile?</td></tr>
+    <tr><td>8</td><td>Există simptome care preced debutul durerii (aură)?</td></tr>
+    <tr><td>9</td><td>Care sunt simptomele ce preced durerile? Cât timp durează?</td></tr>
+    <tr><td>10</td><td>Există simptome însoțitoare? Greață, fotofobie, fonofobie?</td></tr>
+    <tr><td>11</td><td>Cefaleea limitează activitatea profesională sau zilnică?</td></tr>
+    <tr><td>12</td><td>Ce factori agravează/ameliorează cefaleea?</td></tr>
+    <tr><td>13</td><td>Intensitatea, frecvența durerilor s-a modificat?</td></tr>
+    <tr><td>14</td><td>Ce tratament ați urmat pentru cefalee?</td></tr>
+    <tr><td>15</td><td>Există istoric familial de cefalee?</td></tr>
+    <tr><td>16</td><td>Există patologie asociată (boli cronice, infecțioase, inflamatorii)?</td></tr>
+</table>
+
+<p><strong>Examenul clinic trebuie să includă:</strong></p>
+<ul>
+    <li><strong>Semne vitale:</strong> TA, ritm cardiac, temperatură.</li>
+    <li><strong>Neurologic:</strong> Status mental, nervi cranieni, reflexe, mers, fund de ochi (pentru hipertensiune intracraniană sau HTA).</li>
+    <li><strong>Local:</strong> Palparea punctelor sinusale, articulației temporo-mandibulare, zonei cervicale.</li>
+</ul>
+
+<h2>3. Cefaleea la Copii (SNOOP4Y)</h2>
+<p>Prioritatea este excluderea cauzelor secundare grave (tumori, meningite), deși acestea sunt rare.</p>
+
+<p class="table-caption">Tabelul 4.1.6.4. Semne sugestive pentru cefalee secundară la copii</p>
+<table class="snoop-table">
+    <tr><th style="width: 8%">Literă</th><th>Parametru (EN)</th><th>Parametru (RO)</th></tr>
+    <tr><td>S</td><td>Systemic symptoms</td><td>Simptome sistemice</td></tr>
+    <tr><td>N</td><td>Neurologic signs</td><td>Semne neurologice</td></tr>
+    <tr><td>O</td><td>Onset sudden</td><td>Debut brusc/brutal</td></tr>
+    <tr><td>O</td><td>Occipital</td><td>Localizare occipitală</td></tr>
+    <tr><td>P</td><td>Precipitated by Valsalva</td><td>Precipitată de manevra Valsalva</td></tr>
+    <tr><td>P</td><td>Positional</td><td>Modificabilă cu poziția</td></tr>
+    <tr><td>P</td><td>Progressive</td><td>Progresivă</td></tr>
+    <tr><td>P</td><td>Parents</td><td>Absența antecedentelor familiale</td></tr>
+    <tr><td>Y</td><td>Years old</td><td>Vârsta mai mică de 6 ani</td></tr>
+</table>
+
+<h2>4. Patologii Specifice</h2>
+
+<div class="condition-box">
+    <h4>Migrena</h4>
+    <ul>
+        <li><strong>Caracteristici:</strong> Pulsatilă, lateralizată (hemicranie), 4-72 ore, agravată de efort, însoțită de greață/vărsături, fotofobie, fonofobie.</li>
+        <li><strong>Migrena cronică:</strong> Cefalee ≥15 zile/lună timp de 3 luni.</li>
+        <li><strong>Tratament criză acută:</strong> Repaus la întuneric, antiemetice, analgezice, Sumatriptan (oral/subcutanat — contraindicat în sarcină).</li>
+        <li><strong>Tratament profilactic:</strong> Indicat la 2-3 atacuri/lună. Se folosesc: propranolol, amitriptilină, imipramină, sertralină.</li>
+    </ul>
+</div>
+
+<div class="condition-box">
+    <h4>Cefaleea de tip tensional</h4>
+    <ul>
+        <li><strong>Caracteristici:</strong> „Ca o menghină", strângere, bilaterală, intensitate variabilă, persistă zile.</li>
+        <li><strong>Asocieri:</strong> Anxietate, depresie, suprasolicitare psihică.</li>
+    </ul>
+</div>
+
+<div class="condition-box">
+    <h4>Cefaleea Cluster („în ciorchine")</h4>
+    <ul>
+        <li><strong>Caracteristici:</strong> Severă, unilaterală (orbital), durată scurtă (30-120 min), apare noaptea.</li>
+        <li><strong>Semne vegetative:</strong> Congestie nazală, lăcrimare, mioză, ptoză palpebrală.</li>
+        <li><strong>Tratament:</strong> Sumatriptan s.c. sau dihidroergotamină.</li>
+        <li><strong>Profilactic:</strong> propranolol, amitriptilină, prednison.</li>
+    </ul>
+</div>
+
+<div class="condition-box">
+    <h4>Meningita</h4>
+    <ul>
+        <li><strong>Triada:</strong> Cefalee difuză severă + Febră + Redoare de ceafă.</li>
+        <li><strong>Confirmare:</strong> Puncție lombară.</li>
+    </ul>
+</div>
+
+<div class="section-header purple">★ CLINICAL PEARLS</div>
+
+<div class="box box-red">
+    <div class="box-title">⚑ Regula de aur a debutului</div>
+    <p>Cefaleea cu <strong>debut brusc</strong> („lovitură de trăsnet") sugerează patologie vasculară (ex: hemoragie subarahnoidiană). <strong>Intensitatea care crește progresiv</strong> de la ușor la sever ridică suspiciunea unei leziuni intracraniene (tumoră).</p>
+</div>
+
+<div class="box box-purple">
+    <div class="box-title">◉ Semnalul de alarmă nocturn</div>
+    <p>Cefaleea care trezește pacientul din somn nu este de obicei tensională. Gândește-te la:<br>
+    • <strong>Cluster:</strong> la aceeași oră<br>
+    • <strong>Cefalee hipnică:</strong> la vârstnici (&gt;50 ani)<br>
+    • <strong>Apnee în somn:</strong> dacă apare dimineața la trezire</p>
+</div>
+
+<div class="box box-purple">
+    <div class="box-title">◉ Diferențiere anatomică simplă</div>
+    <p><strong>Nevralgia de trigemen:</strong> durere strict pe ramurile nervului.<br>
+    <strong>Migrena:</strong> frecvent hemicranie (frontal/occipital).<br>
+    <strong>Cluster:</strong> strict în spatele orbitei.<br>
+    <strong>Tensională:</strong> „în cască" sau cu debut cervical.</p>
+</div>
+
+<div class="box box-purple">
+    <div class="box-title">◉ Investigații la cefalee matinală</div>
+    <p>La pacienții care se trezesc cu cefalee, <strong>pulsoximetria</strong> sau <strong>polisomnografia</strong> sunt utile pentru excluderea apneei în somn. Bombarea fontanelei la sugari este semn de hipertensiune intracraniană.</p>
+</div>
+
+<div class="section-header teal">◆ DIAGNOSTIC DIFERENȚIAL RAPID</div>
+
+<table>
+    <tr><th class="teal">Simptom / Context</th><th class="teal">Ce să suspectezi</th><th class="teal">Indiciu diferențiator</th></tr>
+    <tr>
+        <td>Unilaterală, Pulsatilă, Greață/Vărsături</td>
+        <td class="cell-bold">Migrenă</td>
+        <td>Fotofobie/Fonofobie, durează 4-72h, agravată de efort</td>
+    </tr>
+    <tr>
+        <td>Bilaterală, „Menghină", Strângere</td>
+        <td class="cell-bold">Cefalee Tensională</td>
+        <td>Fără greață marcată, apare la stres, durată variabilă (zile)</td>
+    </tr>
+    <tr>
+        <td>Unilaterală, Orbitală, Nocturnă</td>
+        <td class="cell-bold">Cefalee Cluster</td>
+        <td>Foarte severă, scurtă (30-120 min), lăcrimare/rinoree/ptoză ipsilaterale</td>
+    </tr>
+    <tr class="highlight-red">
+        <td>Febră, Redoare de ceafă</td>
+        <td class="cell-bold">Meningită</td>
+        <td>Stare generală alterată, semne de iritație meningeală</td>
+    </tr>
+    <tr class="highlight-red">
+        <td>Debut brusc, violent</td>
+        <td class="cell-bold">Hemoragie/Vascular</td>
+        <td>Instalare instantanee, posibil semne neurologice de focar</td>
+    </tr>
+    <tr>
+        <td>Dimineața la trezire</td>
+        <td class="cell-bold">Apnee/Medicație/Tumoră</td>
+        <td>Dacă e zilnică: abuz medicamentos sau apnee. Dacă e progresivă + vărsături: proces expansiv.</td>
+    </tr>
+</table>
+
+<div class="section-header orange">⚡ TAKE-HOME MESSAGES</div>
+
+<div class="box box-orange">
+    <div class="box-title">1. Stabilitatea e un semn bun</div>
+    <p>O cefalee stabilă, cu o durată de mulți ani, este aproape întotdeauna de origine benignă.</p>
+</div>
+
+<div class="box box-orange">
+    <div class="box-title">2. Atenție la schimbări</div>
+    <p>Orice <strong>debut recent</strong> sau <strong>modificarea caracteristicilor</strong> unei cefalee vechi impune investigații suplimentare (CT/RMN).</p>
+</div>
+
+<div class="box box-orange">
+    <div class="box-title">3. Monitorizează abuzul</div>
+    <p>Cefaleea matinală poate fi paradoxal cauzată chiar de <strong>abuzul de medicamente analgezice</strong> sau de consumul excesiv de cofeină/sevraj.</p>
+</div>
+
+<div class="box box-orange">
+    <div class="box-title">4. Tratamentul migrenei</div>
+    <p><strong>Sumatriptanul</strong> este „gold standard" în criză (atenție la sarcină!), iar profilaxia este necesară dacă atacurile sunt mai frecvente de 2-3 ori pe lună.</p>
+</div>
+
+<div class="box box-orange">
+    <div class="box-title">5. Nu uita de SNOOP4Y</div>
+    <p>La copii, folosește mnemonicul pentru a exclude cauzele secundare rare, dar grave (tumori, traume).</p>
+</div>
+
+<div class="footer">
+    <p>Ce Citim Azi — Resurse de învățare pentru rezidenți de Medicină de Familie</p>
+    <p>Bazat pe „Esențialul în Medicina de Familie" • Capitol: Cefaleea</p>
+    <p><em>Citește capitolul complet pentru detalii și nuanțe clinice.</em></p>
+</div>
+
+</body>
+</html>
