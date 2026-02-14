@@ -2,6 +2,7 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
+    <script>(function(){var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);})()</script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ce Citim Azi | Cefaleea</title>
     <style>
@@ -83,9 +84,73 @@
             table { font-size: 0.8rem; }
             th, td { padding: 0.4rem; }
         }
+        .chapter-nav { display: flex; align-items: center; gap: 0.75rem; background: var(--dark-blue); border-radius: 8px; padding: 0.625rem 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .nav-home { color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.875rem; white-space: nowrap; font-weight: 500; }
+        .nav-home:hover { color: white; }
+        .nav-sep { color: rgba(255,255,255,0.3); font-size: 0.875rem; }
+        .nav-chapter { color: rgba(255,255,255,0.6); font-size: 0.875rem; flex: 1; }
+        .nav-tabs { display: flex; gap: 0.25rem; margin-left: auto; }
+        .nav-tab { padding: 0.3rem 0.65rem; border-radius: 5px; text-decoration: none; font-size: 0.8rem; font-weight: 500; color: rgba(255,255,255,0.7); transition: all 0.15s; }
+        .nav-tab:hover { background: rgba(255,255,255,0.12); color: white; }
+        .nav-tab.active { background: var(--teal); color: white; }
+        @media (max-width: 600px) { .nav-chapter { display: none; } }
+
+        /* ===== DARK MODE ===== */
+        html[data-theme="dark"] {
+            --dark-blue: #7ec8e3;
+            --teal: #4fd1c5;
+            --purple: #b794f4;
+            --orange: #f6ad55;
+            --red: #fc8181;
+            --green: #68d391;
+            --light-gray: #1e2d4a;
+            --medium-gray: #a0aec0;
+            --light-teal: #0d2b30;
+            --light-purple: #1e1535;
+            --light-orange: #2d1a00;
+            --light-red: #2d1010;
+            --light-green: #0d2b1a;
+        }
+        html[data-theme="dark"] body { background: #16213e; color: #e2e8f0; }
+        html[data-theme="dark"] .chapter-nav { background: #0f1b35; }
+        html[data-theme="dark"] .condition-box { background: #1a2a42; border-color: #2d3f5c; }
+        html[data-theme="dark"] td { border-color: #2d3f5c; }
+        html[data-theme="dark"] tr:nth-child(even) { background: #1a2a42; }
+        html[data-theme="dark"] .footer { border-top-color: #2d3f5c; }
+
+        /* Toggle button */
+        #theme-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: #1a365d;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            z-index: 9999;
+            transition: transform 0.2s, box-shadow 0.2s;
+            line-height: 1;
+        }
+        #theme-toggle:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+        html[data-theme="dark"] #theme-toggle { background: #4fd1c5; color: #16213e; }
     </style>
 </head>
 <body>
+<nav class="chapter-nav">
+    <a href="index.html" class="nav-home">&#8592; Ce Citim Azi</a>
+    <span class="nav-sep">/</span>
+    <span class="nav-chapter">Cefaleea</span>
+    <div class="nav-tabs">
+        <a href="cefaleea_v4_ce_citim_azi.html" class="nav-tab active">Rezumat</a>
+        <a href="cefalee_grile.html" class="nav-tab">Grile</a>
+        <a href="cefalee_caz_clinic.html" class="nav-tab">Caz Clinic</a>
+    </div>
+</nav>
 
 <div class="brand">CE CITIM AZI | Seria de Rezumate pentru Rezidenți MF</div>
 <div class="brand-line"></div>
@@ -355,6 +420,20 @@
     <p>Bazat pe „Esențialul în Medicina de Familie" • Capitol: Cefaleea</p>
     <p><em>Citește capitolul complet pentru detalii și nuanțe clinice.</em></p>
 </div>
+
+<button id="theme-toggle" title="Comută tema">☾</button>
+<script>(function(){
+    var btn = document.getElementById('theme-toggle');
+    var saved = localStorage.getItem('theme') || 'light';
+    btn.textContent = saved === 'dark' ? '☀' : '☾';
+    btn.addEventListener('click', function() {
+        var cur = document.documentElement.getAttribute('data-theme') || 'light';
+        var next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        btn.textContent = next === 'dark' ? '☀' : '☾';
+    });
+}());</script>
 
 </body>
 </html>
